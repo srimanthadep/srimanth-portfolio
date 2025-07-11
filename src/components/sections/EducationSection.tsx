@@ -46,8 +46,7 @@ export function EducationSection() {
 
         <div className="max-w-4xl mx-auto">
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-[30px] top-0 bottom-0 w-0.5 bg-gradient-primary hidden md:block"></div>
+            {/* Timeline line removed */}
             
             {education.map((edu, index) => (
               <motion.div

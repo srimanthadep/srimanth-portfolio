@@ -31,7 +31,7 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="fixed top-3 left-1/2 -translate-x-1/2 z-50 backdrop-blur-glass bg-card/80 border border-border rounded-full px-4 py-2 shadow-glass"
+        className="fixed top-3 left-3 z-50 backdrop-blur-glass bg-card/80 border border-border rounded-full px-4 py-2 shadow-glass"
       >
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-2">
@@ -79,7 +79,7 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-16 left-1/2 -translate-x-1/2 z-40 backdrop-blur-glass bg-card/95 border border-border rounded-2xl p-4 shadow-glass md:hidden min-w-[200px]"
+          className="fixed top-16 left-3 z-40 backdrop-blur-glass bg-card/95 border border-border rounded-2xl p-4 shadow-glass md:hidden min-w-[200px]"
         >
           <div className="flex flex-col space-y-2">
             {sections.map((section) => (

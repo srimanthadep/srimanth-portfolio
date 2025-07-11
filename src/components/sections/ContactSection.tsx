@@ -118,7 +118,7 @@ export function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-12 space-y-4"
         >
           <Button 
             asChild 
@@ -130,6 +130,26 @@ export function ContactSection() {
               Send Email
             </a>
           </Button>
+          
+          <div className="flex justify-center">
+            <Button 
+              asChild 
+              variant="outline" 
+              size="lg" 
+              className="backdrop-blur-glass border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+            >
+              <a 
+                href="https://drive.google.com/file/d/1Gq8q1Pe-9fqQcbueZZQMY9l93v82tvbZ/view?usp=drive_link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                </svg>
+                View Resume
+              </a>
+            </Button>
+          </div>
         </motion.div>
       </div>
     </section>

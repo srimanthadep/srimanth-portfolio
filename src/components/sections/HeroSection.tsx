@@ -18,9 +18,22 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="relative"
           >
-            <h1 className="text-6xl md:text-8xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow">
+            <motion.h1 
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.9 }}
+              whileHover={{ 
+                scale: 1.05,
+                textShadow: "0 0 20px hsl(217 91% 60%), 0 0 40px hsl(262 83% 58%)",
+              }}
+              className="text-6xl md:text-8xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow font-serif tracking-wider"
+              style={{
+                fontFamily: "'Playfair Display', 'Georgia', serif",
+                letterSpacing: '0.1em'
+              }}
+            >
               SRIMANTH ADEP
-            </h1>
+            </motion.h1>
           </motion.div>
           
           <motion.p

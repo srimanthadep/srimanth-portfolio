@@ -21,9 +21,23 @@ export function HeroSection() {
             <h1 className="text-6xl md:text-8xl font-bold bg-gradient-primary bg-clip-text text-transparent animate-glow">
               SRIMANTH ADEP
             </h1>
-            <div className="absolute inset-0 bg-gradient-primary bg-clip-text text-transparent opacity-50 blur-sm">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ 
+                scale: [0.8, 1.1, 1],
+                opacity: [0, 0.7, 0.5],
+                rotate: [0, 1, -1, 0]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }}
+              className="absolute inset-0 bg-gradient-primary bg-clip-text text-transparent opacity-50 blur-sm"
+            >
               SRIMANTH ADEP
-            </div>
+            </motion.div>
           </motion.div>
           
           <motion.p

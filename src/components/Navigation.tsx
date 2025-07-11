@@ -21,16 +21,16 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 backdrop-blur-glass bg-card/80 border border-border rounded-full px-6 py-3 shadow-glass"
+      className="fixed top-3 left-1/2 -translate-x-1/2 z-50 backdrop-blur-glass bg-card/80 border border-border rounded-full px-2 py-2 md:px-6 md:py-3 shadow-glass max-w-[calc(100vw-1rem)] overflow-x-auto"
     >
-      <div className="flex space-x-2">
+      <div className="flex space-x-1 md:space-x-2 min-w-max">
         {sections.map((section) => (
           <Button
             key={section.id}
             variant={activeSection === section.id ? "default" : "ghost"}
             size="sm"
             onClick={() => onSectionChange(section.id)}
-            className={`relative transition-all duration-300 ${
+            className={`relative transition-all duration-300 text-xs md:text-sm px-2 py-1 md:px-3 md:py-2 whitespace-nowrap ${
               activeSection === section.id 
                 ? 'bg-primary text-primary-foreground shadow-glow-primary' 
                 : 'hover:bg-secondary/80'

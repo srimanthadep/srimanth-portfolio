@@ -11,6 +11,8 @@ export function ContactSection() {
       value: "srimanthadep@gmail.com",
       href: "mailto:srimanthadep@gmail.com",
       color: "text-blue-400",
+      bgColor: "bg-blue-400/20",
+      hoverColor: "hover:bg-blue-400/30",
     },
     {
       icon: Phone,
@@ -18,12 +20,16 @@ export function ContactSection() {
       value: "+91 9912885813",
       href: "tel:+919912885813",
       color: "text-green-400",
+      bgColor: "bg-green-400/20",
+      hoverColor: "hover:bg-green-400/30",
     },
     {
       icon: MapPin,
       label: "Location",
       value: "Hyderabad, India – 500060",
       color: "text-red-400",
+      bgColor: "bg-red-400/20",
+      hoverColor: "hover:bg-red-400/30",
     },
     {
       icon: Linkedin,
@@ -31,6 +37,8 @@ export function ContactSection() {
       value: "linkedin.com/in/srimanthadep",
       href: "https://linkedin.com/in/srimanthadep",
       color: "text-blue-500",
+      bgColor: "bg-blue-500/20",
+      hoverColor: "hover:bg-blue-500/30",
     },
   ];
 
@@ -72,9 +80,12 @@ export function ContactSection() {
                       rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                       className="flex items-center space-x-4 group-hover:text-primary transition-colors"
                     >
-                      <div className={`p-3 rounded-lg bg-opacity-20 ${info.color} bg-current`}>
-                        <info.icon className={`w-6 h-6 ${info.color}`} />
-                      </div>
+                      <motion.div 
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        className={`p-3 rounded-lg ${info.bgColor} ${info.hoverColor} transition-colors duration-300`}
+                      >
+                        <info.icon className={`w-6 h-6 ${info.color} group-hover:scale-110 transition-transform duration-300`} />
+                      </motion.div>
                       <div>
                         <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                           {info.label}
@@ -84,9 +95,12 @@ export function ContactSection() {
                     </a>
                   ) : (
                     <div className="flex items-center space-x-4">
-                      <div className={`p-3 rounded-lg bg-opacity-20 ${info.color} bg-current`}>
-                        <info.icon className={`w-6 h-6 ${info.color}`} />
-                      </div>
+                      <motion.div 
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        className={`p-3 rounded-lg ${info.bgColor} ${info.hoverColor} transition-colors duration-300`}
+                      >
+                        <info.icon className={`w-6 h-6 ${info.color} group-hover:scale-110 transition-transform duration-300`} />
+                      </motion.div>
                       <div>
                         <h4 className="font-semibold text-foreground">{info.label}</h4>
                         <p className="text-muted-foreground">{info.value}</p>

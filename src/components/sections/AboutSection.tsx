@@ -30,12 +30,13 @@ export function AboutSection() {
           <div className="w-24 h-1 bg-gradient-primary mx-auto rounded-full mb-8"></div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
+            className="lg:col-span-2"
           >
             <GlareHover
               glareColor="#ffffff"
@@ -51,26 +52,30 @@ export function AboutSection() {
               borderColor="transparent"
               style={{ width: '100%' }}
             >
-              <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass">
+              <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full">
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-semibold mb-6 text-foreground">About Me</h3>
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    I'm a passionate Computer Science Engineering student specializing in Data Science, with a strong foundation in both theoretical concepts and practical applications. My journey in technology began with a curiosity to understand how data can drive meaningful insights and create impactful solutions.
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    I believe in continuous learning and staying updated with the latest technologies. My goal is to leverage my skills in machine learning, web development, and data analysis to solve real-world problems and contribute to innovative projects that make a difference.
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
-                    When I'm not coding, you'll find me exploring new technologies, participating in hackathons, or collaborating with fellow developers on exciting projects. I'm always eager to take on new challenges and grow both personally and professionally.
-                  </p>
+                  <div className="space-y-6 text-muted-foreground leading-relaxed">
+                    <p>
+                      I'm a passionate Computer Science Engineering student specializing in Data Science, with a strong foundation in both theoretical concepts and practical applications. My journey in technology began with a curiosity to understand how data can drive meaningful insights and create impactful solutions.
+                    </p>
+                    <p>
+                      I believe in continuous learning and staying updated with the latest technologies. My goal is to leverage my skills in machine learning, web development, and data analysis to solve real-world problems and contribute to innovative projects that make a difference.
+                    </p>
+                    <p>
+                      When I'm not coding, you'll find me exploring new technologies, participating in hackathons, or collaborating with fellow developers on exciting projects. I'm always eager to take on new challenges and grow both personally and professionally.
+                    </p>
+                  </div>
                   
-                  <h4 className="text-xl font-semibold mb-4 text-foreground">Languages</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {languages.map((language) => (
-                      <Badge key={language} variant="secondary" className="bg-accent text-accent-foreground">
-                        {language}
-                      </Badge>
-                    ))}
+                  <div className="mt-8">
+                    <h4 className="text-xl font-semibold mb-4 text-foreground">Languages</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {languages.map((language) => (
+                        <Badge key={language} variant="secondary" className="bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors duration-300">
+                          {language}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -93,13 +98,13 @@ export function AboutSection() {
                 transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300">
-                  <CardContent className="p-4">
+                <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 group">
+                  <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
-                      <div className="p-2 bg-primary/20 rounded-lg">
+                      <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
                         <info.icon className="w-5 h-5 text-primary" />
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <p className="font-medium text-foreground">{info.label}</p>
                         <p className="text-muted-foreground">{info.value}</p>
                       </div>

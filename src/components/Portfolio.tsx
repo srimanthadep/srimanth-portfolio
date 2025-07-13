@@ -7,6 +7,7 @@ import { EducationSection } from "./sections/EducationSection";
 import { ExperienceSection } from "./sections/ExperienceSection";
 import { ProjectsSection } from "./sections/ProjectsSection";
 import { SkillsSection } from "./sections/SkillsSection";
+import TechStack from "./TechStack";
 import { ContactSection } from "./sections/ContactSection";
 
 export function Portfolio() {
@@ -14,7 +15,7 @@ export function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'about', 'education', 'experience', 'projects', 'skills', 'contact'];
+      const sections = ['hero', 'about', 'education', 'experience', 'projects', 'skills', 'techstack', 'contact'];
       const scrollPosition = window.scrollY + window.innerHeight / 2;
 
       for (const section of sections) {
@@ -69,14 +70,13 @@ export function Portfolio() {
         <SkillsSection />
       </div>
       
+      <div id="techstack">
+        <TechStack />
+      </div>
+      
       <div id="contact">
         <ContactSection />
       </div>
-      
-      {/* Footer */}
-      <footer className="py-8 text-center text-muted-foreground border-t border-border">
-        <p>&copy; 2024 Srimanth Adep. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

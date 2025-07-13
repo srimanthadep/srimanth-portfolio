@@ -32,15 +32,6 @@ export function ProjectsSection() {
       demo: "https://shareyourride-demo.com",
       featured: false,
     },
-    {
-      title: "Task Management App",
-      description: "A full-stack task management application with user authentication, real-time updates, and drag-and-drop functionality.",
-      technologies: ["React", "Node.js", "MongoDB", "Express", "Socket.io"],
-      icon: Smartphone,
-      github: "https://github.com/yourusername/task-manager",
-      demo: "https://task-manager-demo.com",
-      featured: false,
-    },
   ];
 
   return (
@@ -53,13 +44,13 @@ export function ProjectsSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent tracking-wide leading-normal font-[Inter] pb-2 px-2">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent px-2 py-1 leading-tight">
             Projects
           </h2>
           <div className="w-24 h-1 bg-gradient-primary mx-auto rounded-full mb-8"></div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {projects.map((project, index) => (
             <motion.div
               key={index}
@@ -69,17 +60,17 @@ export function ProjectsSection() {
               viewport={{ once: true }}
               className={`group ${project.featured ? 'md:col-span-2' : ''}`}
             >
-              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full group-hover:scale-105 ${
+              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full group-hover:scale-[1.02] ${
                 project.featured ? 'ring-2 ring-primary' : ''
               }`}>
-                <CardHeader>
+                <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors">
+                      <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
                         <project.icon className="w-6 h-6 text-primary" />
                       </div>
-                      <div>
-                        <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors">
+                      <div className="flex-1">
+                        <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300">
                           {project.title}
                         </CardTitle>
                         {project.featured && (
@@ -89,15 +80,17 @@ export function ProjectsSection() {
                         )}
                       </div>
                     </div>
-                    <div className="flex space-x-2">
+                    
+                    <div className="flex gap-2">
                       {project.github && (
                         <a
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
+                          className="p-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors duration-300 group/link"
+                          aria-label="View project on GitHub"
                         >
-                          <Github className="w-4 h-4" />
+                          <Github className="w-4 h-4 group-hover/link:scale-110 transition-transform duration-300" />
                         </a>
                       )}
                       {project.demo && (
@@ -105,9 +98,10 @@ export function ProjectsSection() {
                           href={project.demo}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
+                          className="p-2 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors duration-300 group/link"
+                          aria-label="View live demo"
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <ExternalLink className="w-4 h-4 group-hover/link:scale-110 transition-transform duration-300" />
                         </a>
                       )}
                     </div>
@@ -122,7 +116,7 @@ export function ProjectsSection() {
                       <Badge 
                         key={techIndex} 
                         variant="secondary" 
-                        className="bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors"
+                        className="bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors duration-300"
                       >
                         {tech}
                       </Badge>

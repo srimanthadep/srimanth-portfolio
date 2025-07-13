@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Code, Globe, Database, Award, Users } from "lucide-react";
+import { Code, Globe, Database, Award } from "lucide-react";
 
 export function SkillsSection() {
   const skillCategories = [
@@ -77,17 +77,17 @@ export function SkillsSection() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
             >
-              <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full">
-                <CardHeader>
+              <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full group">
+                <CardHeader className="pb-4">
                   <div className="flex items-center space-x-3">
-                    <div className={`p-3 rounded-lg ${category.color}`}>
+                    <div className={`p-3 rounded-lg ${category.color} group-hover:scale-110 transition-transform duration-300`}>
                       <category.icon className="w-6 h-6" />
                     </div>
-                    <CardTitle className="text-lg text-foreground">{category.title}</CardTitle>
+                    <CardTitle className="text-lg text-foreground group-hover:text-primary transition-colors duration-300">{category.title}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {category.skills.map((skill, skillIndex) => (
                       <motion.div
                         key={skillIndex}
@@ -101,7 +101,7 @@ export function SkillsSection() {
                           <span className="text-sm font-medium text-foreground">{skill.name}</span>
                           <span className="text-xs text-muted-foreground">{skill.level}%</span>
                         </div>
-                        <div className="w-full bg-secondary rounded-full h-2">
+                        <div className="w-full bg-secondary rounded-full h-2 overflow-hidden">
                           <motion.div
                             initial={{ width: 0 }}
                             whileInView={{ width: `${skill.level}%` }}
@@ -137,15 +137,15 @@ export function SkillsSection() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-accent transition-all duration-300">
+                <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-accent transition-all duration-300 group">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-3">
-                      <div className="p-2 bg-accent/20 rounded-lg">
+                      <div className="p-2 bg-accent/20 rounded-lg group-hover:bg-accent/30 transition-colors duration-300">
                         <Award className="w-5 h-5 text-accent" />
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground">{cert.name}</h4>
-                        <p className="text-sm text-muted-foreground">{cert.provider}</p>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground group-hover:text-accent transition-colors duration-300">{cert.name}</h4>
+                        <p className="text-sm text-muted-foreground mt-1">{cert.provider}</p>
                       </div>
                     </div>
                   </CardContent>

@@ -1,26 +1,18 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Linkedin, Github, Copy, Check, Calendar } from "lucide-react";
-import { SiWhatsapp, SiX } from "react-icons/si";
+import { Mail, Phone, MapPin, Linkedin, Github, Calendar } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import ContactQRCode from "../ContactQRCode";
 import { ResumeDownload } from "../ResumeDownload";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export function ContactSection() {
-  const [copied, setCopied] = useState("");
   const { ref: sectionRef, isIntersecting } = useIntersectionObserver();
-  
-  const handleCopy = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(label);
-    setTimeout(() => setCopied(""), 1500);
-  };
 
   const contactInfo = [
     {
       icon: SiWhatsapp,
       label: "WhatsApp",
-      value: "+91 99128 58513",
+      value: "",
       href: "http://wa.me/+919912858513",
       color: "text-green-500",
       bgColor: "bg-green-500/20",
@@ -33,7 +25,7 @@ export function ContactSection() {
     {
       icon: Mail,
       label: "Email",
-      value: "srimanthadep@gmail.com",
+      value: "",
       href: "mailto:srimanthadep@gmail.com",
       color: "text-blue-400",
       bgColor: "bg-blue-400/20",
@@ -44,7 +36,7 @@ export function ContactSection() {
     {
       icon: Phone,
       label: "Phone",
-      value: "+91 9912885813",
+      value: "",
       href: "tel:+919912885813",
       color: "text-green-400",
       bgColor: "bg-green-400/20",
@@ -55,7 +47,7 @@ export function ContactSection() {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      value: "linkedin.com/in/srimanthadep",
+      value: "",
       href: "https://linkedin.com/in/srimanthadep",
       color: "text-blue-500",
       bgColor: "bg-blue-500/20",
@@ -66,13 +58,24 @@ export function ContactSection() {
     {
       icon: Github,
       label: "GitHub",
-      value: "github.com/srimanthadep",
+      value: "",
       href: "https://github.com/srimanthadep",
       color: "text-gray-400",
       bgColor: "bg-gray-400/20",
       hoverColor: "hover:bg-gray-400/30",
       aria: "View GitHub profile",
       tooltip: "View my GitHub profile"
+    },
+    {
+      icon: Calendar,
+      label: "Schedule a Call",
+      value: "",
+      href: "https://calendly.com/srimanthadep/30min",
+      color: "text-purple-400",
+      bgColor: "bg-purple-400/20",
+      hoverColor: "hover:bg-purple-400/30",
+      aria: "Schedule a call with me",
+      tooltip: "Schedule a 30-minute call with me"
     },
     {
       icon: MapPin,
@@ -131,26 +134,7 @@ export function ContactSection() {
                   </span>
                 )}
                 
-                {(info.label === 'Email' || info.label === 'Phone') && (
-                  <button
-                    onClick={e => { e.preventDefault(); handleCopy(info.value, info.label); }}
-                    className="ml-2 p-2 rounded-lg bg-muted/50 hover:bg-primary/20 transition-all duration-200 flex items-center gap-1 text-xs text-foreground hover:text-primary group/copy"
-                    aria-label={`Copy ${info.label}`}
-                    title={`Copy ${info.label}`}
-                  >
-                    {copied === info.label ? (
-                      <>
-                        <Check className="w-3 h-3 group-hover/copy:scale-110 transition-transform duration-300" />
-                        Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3 h-3 group-hover/copy:scale-110 transition-transform duration-300" />
-                        Copy
-                      </>
-                    )}
-                  </button>
-                )}
+
               </a>
             );
           })}

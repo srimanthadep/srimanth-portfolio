@@ -118,7 +118,7 @@ export function HeroSection() {
               className="backdrop-blur-glass hover:shadow-glow-primary transition-all duration-300 w-full sm:w-auto group"
             >
               <a 
-                href="/resume.pdf" 
+                href="/Srimanth_Adep_Resume.pdf" 
                 download
                 aria-label="Download my resume as PDF"
                 className="flex items-center justify-center"
@@ -127,6 +127,7 @@ export function HeroSection() {
                 Download Resume
               </a>
             </Button>
+
           </motion.div>
         </motion.div>
       </div>

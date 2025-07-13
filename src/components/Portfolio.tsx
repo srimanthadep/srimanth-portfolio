@@ -9,6 +9,7 @@ import { ProjectsSection } from "./sections/ProjectsSection";
 import { SkillsSection } from "./sections/SkillsSection";
 import TechStack from "./TechStack";
 import { ContactSection } from "./sections/ContactSection";
+import { BackToTop } from "./BackToTop";
 
 export function Portfolio() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -77,6 +78,8 @@ export function Portfolio() {
       <div id="contact">
         <ContactSection />
       </div>
+
+      <BackToTop />
     </div>
   );
 }

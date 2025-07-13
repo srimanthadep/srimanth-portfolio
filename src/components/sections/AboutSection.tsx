@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, User, Heart } from "lucide-react";
+import GlareHover from "../GlareHover";
 
 export function AboutSection() {
   const personalInfo = [
@@ -36,26 +37,44 @@ export function AboutSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-semibold mb-6 text-foreground">Objective</h3>
-                <p className="text-muted-foreground leading-relaxed mb-8">
-                  Seeking opportunities to enhance skills and knowledge in computer science and engineering. 
-                  I value mutual growth and development with organizations and desire a collaborative, 
-                  innovative environment that values creativity and teamwork. My aim is to contribute to 
-                  organizational goals while pursuing professional aspirations in technology and software development.
-                </p>
-                
-                <h4 className="text-xl font-semibold mb-4 text-foreground">Languages</h4>
-                <div className="flex flex-wrap gap-2">
-                  {languages.map((language) => (
-                    <Badge key={language} variant="secondary" className="bg-accent text-accent-foreground">
-                      {language}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <GlareHover
+              glareColor="#ffffff"
+              glareOpacity={0.3}
+              glareAngle={-30}
+              glareSize={300}
+              transitionDuration={800}
+              playOnce={false}
+              width="100%"
+              height="100%"
+              background="transparent"
+              borderRadius="1rem"
+              borderColor="transparent"
+              style={{ width: '100%' }}
+            >
+              <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-semibold mb-6 text-foreground">About Me</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    I'm a passionate Computer Science Engineering student specializing in Data Science, with a strong foundation in both theoretical concepts and practical applications. My journey in technology began with a curiosity to understand how data can drive meaningful insights and create impactful solutions.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    I believe in continuous learning and staying updated with the latest technologies. My goal is to leverage my skills in machine learning, web development, and data analysis to solve real-world problems and contribute to innovative projects that make a difference.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    When I'm not coding, you'll find me exploring new technologies, participating in hackathons, or collaborating with fellow developers on exciting projects. I'm always eager to take on new challenges and grow both personally and professionally.
+                  </p>
+                  
+                  <h4 className="text-xl font-semibold mb-4 text-foreground">Languages</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {languages.map((language) => (
+                      <Badge key={language} variant="secondary" className="bg-accent text-accent-foreground">
+                        {language}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </GlareHover>
           </motion.div>
 
           <motion.div

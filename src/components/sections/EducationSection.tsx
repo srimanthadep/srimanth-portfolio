@@ -2,13 +2,14 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Calendar } from "lucide-react";
+import GlareHover from "../GlareHover";
 
 export function EducationSection() {
   const education = [
     {
       institution: "Anurag University (AU), Hyderabad",
       degree: "B.Tech in Computer Science and Engineering",
-      grade: "CGPA: 7.95",
+      grade: "CGPA: 7.99",
       date: "Expected Mar 2026",
       current: true,
     },
@@ -51,18 +52,17 @@ export function EducationSection() {
             {education.map((edu, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className={`relative mb-8 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8 md:ml-16'}`}
+                className="relative mb-8"
               >
-                {/* Timeline dot */}
-                <div className="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-background hidden md:block"></div>
+                {/* Timeline dot removed */}
                 
                 <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 ${
                   edu.current ? 'ring-2 ring-primary' : ''
-                }`}>
+                }`} style={{ overflow: 'hidden', borderRadius: '1rem' }}>
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
@@ -87,9 +87,24 @@ export function EducationSection() {
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-accent font-semibold">{edu.grade}</div>
-                  </CardContent>
+                  <GlareHover
+                    glareColor="#ffffff"
+                    glareOpacity={0.3}
+                    glareAngle={-30}
+                    glareSize={300}
+                    transitionDuration={800}
+                    playOnce={false}
+                    width="100%"
+                    height="100%"
+                    background="transparent"
+                    borderRadius="1rem"
+                    borderColor="transparent"
+                    style={{ width: '100%', borderRadius: '1rem', overflow: 'hidden' }}
+                  >
+                    <CardContent>
+                      <div className="text-accent font-semibold">{edu.grade}</div>
+                    </CardContent>
+                  </GlareHover>
                 </Card>
               </motion.div>
             ))}

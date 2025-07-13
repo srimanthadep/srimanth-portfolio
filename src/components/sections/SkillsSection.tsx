@@ -8,19 +8,37 @@ export function SkillsSection() {
     {
       title: "Programming Languages",
       icon: Code,
-      skills: ["Python", "C", "Java"],
+      skills: [
+        { name: "Python", level: 85 },
+        { name: "Java", level: 80 },
+        { name: "C", level: 75 },
+        { name: "JavaScript", level: 70 },
+        { name: "TypeScript", level: 65 }
+      ],
       color: "bg-blue-500/20 text-blue-400",
     },
     {
       title: "Web Development",
       icon: Globe,
-      skills: ["HTML", "CSS"],
+      skills: [
+        { name: "React", level: 75 },
+        { name: "HTML5", level: 90 },
+        { name: "CSS3", level: 85 },
+        { name: "Node.js", level: 60 },
+        { name: "Git", level: 80 }
+      ],
       color: "bg-green-500/20 text-green-400",
     },
     {
-      title: "Database & Others",
+      title: "Data Science & Others",
       icon: Database,
-      skills: ["DBMS", "Team Leadership"],
+      skills: [
+        { name: "Machine Learning", level: 70 },
+        { name: "DBMS", level: 75 },
+        { name: "Data Analysis", level: 80 },
+        { name: "Team Leadership", level: 85 },
+        { name: "Problem Solving", level: 90 }
+      ],
       color: "bg-purple-500/20 text-purple-400",
     },
   ];
@@ -69,21 +87,29 @@ export function SkillsSection() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="space-y-3">
                     {category.skills.map((skill, skillIndex) => (
                       <motion.div
                         key={skillIndex}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: skillIndex * 0.1 }}
                         viewport={{ once: true }}
+                        className="space-y-2"
                       >
-                        <Badge 
-                          variant="default" 
-                          className="bg-primary text-primary-foreground hover:bg-primary/80 transition-colors"
-                        >
-                          {skill}
-                        </Badge>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-foreground">{skill.name}</span>
+                          <span className="text-xs text-muted-foreground">{skill.level}%</span>
+                        </div>
+                        <div className="w-full bg-secondary rounded-full h-2">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${skill.level}%` }}
+                            transition={{ duration: 1, delay: skillIndex * 0.1 }}
+                            viewport={{ once: true }}
+                            className="bg-primary h-2 rounded-full"
+                          />
+                        </div>
                       </motion.div>
                     ))}
                   </div>

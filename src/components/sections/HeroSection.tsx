@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Phone, Download } from "lucide-react";
+import GradientText from "../GradientText";
 
 export function HeroSection() {
   return (
@@ -18,9 +19,14 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="relative"
           >
-            <h1 className="text-6xl md:text-8xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <GradientText
+              colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+              animationSpeed={3}
+              showBorder={false}
+              className="text-6xl md:text-8xl font-bold"
+            >
               SRIMANTH ADEP
-            </h1>
+            </GradientText>
           </motion.div>
           
           <motion.p
@@ -40,7 +46,7 @@ export function HeroSection() {
           >
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-              Hyderabad, India – 500060
+              Hyderabad, India
             </div>
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4" />
@@ -68,6 +74,12 @@ export function HeroSection() {
               <a href="#contact">
                 <Mail className="w-5 h-5 mr-2" />
                 Contact Me
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="backdrop-blur-glass">
+              <a href="/resume.pdf" download>
+                <Download className="w-5 h-5 mr-2" />
+                Download Resume
               </a>
             </Button>
           </motion.div>

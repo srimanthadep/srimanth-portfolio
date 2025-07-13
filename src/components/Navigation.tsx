@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 
 interface NavigationProps {
   activeSection: string;
@@ -21,11 +22,10 @@ const sections = [
 
 export function Navigation({ activeSection, onSectionChange }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
-    // Add theme toggle logic here if you have a theme context
   };
 
   return (

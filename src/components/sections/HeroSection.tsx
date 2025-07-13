@@ -100,7 +100,7 @@ export function HeroSection() {
               asChild 
               variant="outline" 
               size="lg" 
-              className="backdrop-blur-glass hover:shadow-glow-primary transition-all duration-300 w-full sm:w-auto group"
+              className="backdrop-blur-glass hover:bg-black hover:text-white hover:border-black transition-all duration-300 w-full sm:w-auto group"
             >
               <a 
                 href="#contact"
@@ -115,7 +115,7 @@ export function HeroSection() {
               asChild 
               variant="outline" 
               size="lg" 
-              className="backdrop-blur-glass hover:shadow-glow-primary transition-all duration-300 w-full sm:w-auto group"
+              className="backdrop-blur-glass hover:bg-black hover:text-white hover:border-black transition-all duration-300 w-full sm:w-auto group"
             >
               <a 
                 href="/Srimanth_Adep_Resume.pdf" 

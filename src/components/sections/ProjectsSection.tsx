@@ -116,7 +116,7 @@ export function ProjectsSection() {
                       <Badge 
                         key={techIndex} 
                         variant="secondary" 
-                        className="bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors duration-300"
+                        className="bg-primary/20 text-primary hover:bg-primary/30 transition-colors duration-300"
                       >
                         {tech}
                       </Badge>

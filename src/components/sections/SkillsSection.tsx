@@ -140,11 +140,11 @@ export function SkillsSection() {
                 <Card className="backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-accent transition-all duration-300 group">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-3">
-                      <div className="p-2 bg-accent/20 rounded-lg group-hover:bg-accent/30 transition-colors duration-300">
-                        <Award className="w-5 h-5 text-accent" />
+                      <div className="p-2 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
+                        <Award className="w-5 h-5 text-primary" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-foreground group-hover:text-accent transition-colors duration-300">{cert.name}</h4>
+                        <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300">{cert.name}</h4>
                         <p className="text-sm text-muted-foreground mt-1">{cert.provider}</p>
                       </div>
                     </div>

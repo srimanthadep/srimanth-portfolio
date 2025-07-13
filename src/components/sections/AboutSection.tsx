@@ -71,7 +71,7 @@ export function AboutSection() {
                     <h4 className="text-xl font-semibold mb-4 text-foreground">Languages</h4>
                     <div className="flex flex-wrap gap-2">
                       {languages.map((language) => (
-                        <Badge key={language} variant="secondary" className="bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors duration-300">
+                        <Badge key={language} variant="secondary" className="bg-primary/20 text-primary hover:bg-primary/30 transition-colors duration-300">
                           {language}
                         </Badge>
                       ))}

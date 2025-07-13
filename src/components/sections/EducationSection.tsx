@@ -84,7 +84,7 @@ export function EducationSection() {
                 </CardHeader>
                 
                 <CardContent className="pt-0">
-                  <div className="text-lg font-semibold text-accent text-left">{edu.grade}</div>
+                  <div className="text-lg font-semibold text-primary text-left">{edu.grade}</div>
                 </CardContent>
               </Card>
             </motion.div>

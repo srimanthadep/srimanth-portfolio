@@ -4,12 +4,12 @@ import { Coffee, Code, Heart, Zap, Star, Trophy } from "lucide-react";
 
 const facts = [
   {
-    text: "I've written over 10,000 lines of code this year alone!",
+    text: "I built my first website at age 15!",
     icon: Code,
     color: "text-blue-400"
   },
   {
-    text: "My favorite programming language is Python, but I'm always learning new ones.",
+    text: "I love solving algorithmic challenges on LeetCode and Codeforces.",
     icon: Zap,
     color: "text-yellow-400"
   },
@@ -19,12 +19,12 @@ const facts = [
     color: "text-purple-400"
   },
   {
-    text: "I love contributing to open source projects in my free time.",
+    text: "I enjoy collaborating on open source and student projects.",
     icon: Heart,
     color: "text-red-400"
   },
   {
-    text: "I've won 3 hackathons and counting!",
+    text: "I've won 3 coding competitions so far!",
     icon: Trophy,
     color: "text-green-400"
   },

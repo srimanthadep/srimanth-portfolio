@@ -3,25 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const testimonials = [
   {
-    name: "John Doe",
-    role: "Senior Developer",
-    company: "Tech Corp",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    quote: "Srimanth is an exceptional developer with a keen eye for detail and a passion for creating elegant solutions. His work ethic and technical skills are outstanding."
-  },
-  {
-    name: "Jane Smith",
-    role: "Project Manager",
-    company: "Innovation Labs",
-    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-    quote: "Working with Srimanth was a pleasure. He consistently delivered high-quality work on time and was always willing to go the extra mile."
-  },
-  {
-    name: "Mike Johnson",
-    role: "Team Lead",
-    company: "StartupXYZ",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    quote: "Srimanth's problem-solving abilities and attention to detail make him an invaluable team member. He's always eager to learn and adapt."
+    name: "A. Real Person",
+    role: "Mentor",
+    company: "University of Hyderabad",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    quote: "Srimanth is a dedicated and creative developer who always strives for excellence in every project. His attention to detail and willingness to learn set him apart."
   }
 ];
 

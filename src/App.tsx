@@ -28,7 +28,7 @@ const App = () => (
             <Analytics />
             <Routes>
               <Route path="/" element={<Index />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              {/* Custom routes for portfolio pages */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

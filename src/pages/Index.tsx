@@ -12,7 +12,7 @@ const Index = () => {
       <Portfolio />
       {/* Footer */}
       <footer className="py-8 text-center text-muted-foreground border-t border-border bg-card/50 backdrop-blur-sm">
-        <p>&copy; 2025 Srimanth Adep. All rights reserved.</p>
+        <p>&copy; 2025 Srimanth Adep. Crafted with passion and precision.</p>
       </footer>
     </div>
   );

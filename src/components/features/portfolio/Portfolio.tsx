@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { Scene3D } from "./Scene3D";
-import { Navigation } from "./Navigation";
-import { HeroSection } from "./sections/HeroSection";
-import { AboutSection } from "./sections/AboutSection";
-import { EducationSection } from "./sections/EducationSection";
-import { ExperienceSection } from "./sections/ExperienceSection";
-import { ProjectsSection } from "./sections/ProjectsSection";
-import { SkillsSection } from "./sections/SkillsSection";
-import { ContactSection } from "./sections/ContactSection";
-import { BackToTop } from "./BackToTop";
+import { Scene3D } from "../../effects/Scene3D";
+import { Navigation } from "../../layout/Navigation";
+import { HeroSection } from "../../sections/HeroSection";
+import { AboutSection } from "../../sections/AboutSection";
+import { EducationSection } from "../../sections/EducationSection";
+import { ExperienceSection } from "../../sections/ExperienceSection";
+import { ProjectsSection } from "../../sections/ProjectsSection";
+import { SkillsSection } from "../../sections/SkillsSection";
+import { ContactSection } from "../../sections/ContactSection";
+import { BackToTop } from "../../common/BackToTop";
 
 export function Portfolio() {
   const [activeSection, setActiveSection] = useState('hero');

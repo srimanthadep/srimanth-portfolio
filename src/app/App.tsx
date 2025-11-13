@@ -4,11 +4,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import { ScrollProgress } from "./components/ScrollProgress";
-import { ErrorBoundary } from "./components/ErrorBoundary";
-import { Analytics } from "./components/Analytics";
+import Index from "../pages/Index";
+import NotFound from "../pages/NotFound";
+import { ScrollProgress } from "../components/common/ScrollProgress";
+import { ErrorBoundary } from "../components/common/ErrorBoundary";
+import { Analytics } from "../components/features/analytics/Analytics";
 
 const queryClient = new QueryClient();
 

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, User, Heart } from "lucide-react";
-import GlareHover from "../GlareHover";
+import GlareHover from "../effects/GlareHover";
 
 export function AboutSection() {
   const personalInfo = [

@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
+import '../styles/index.css'
 
 // Performance optimization: Add loading="lazy" to all images
 document.addEventListener('DOMContentLoaded', () => {

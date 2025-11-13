@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, MapPin, Linkedin, Github, Calendar } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
-import ContactQRCode from "../ContactQRCode";
-import { ResumeDownload } from "../ResumeDownload";
+import ContactQRCode from "../features/contact/ContactQRCode";
+import { ResumeDownload } from "../features/resume/ResumeDownload";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export function ContactSection() {

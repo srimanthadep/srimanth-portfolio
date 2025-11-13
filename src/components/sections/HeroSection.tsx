@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, MapPin, Phone, Download } from "lucide-react";
-import GradientText from "../GradientText";
+import GradientText from "../effects/GradientText";
 
 export function HeroSection() {
   return (

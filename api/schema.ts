@@ -64,4 +64,3 @@ export const siteSettings = pgTable("site_settings", {
 });
 
 export type SiteSetting = InferSelectModel<typeof siteSettings>;
-

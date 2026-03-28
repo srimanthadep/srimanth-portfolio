@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { type Experience, type Education, type Project, type Skill } from "@/db/schema";
+import { type Experience, type Education, type Project, type Skill } from "../../../api/schema";
 
 interface PortfolioData {
   experiences: Experience[];

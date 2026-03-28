@@ -1,5 +1,5 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
-import { type Experience } from "@/db/schema";
+import { type Experience } from "../../../../../../../../../../api/schema";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

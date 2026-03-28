@@ -16,7 +16,7 @@ const app = new Hono();
 // Middlewares
 app.use("*", logger());
 app.use("*", cors({
-  origin: "*", // Allow all for now, can be restricted later
+  origin: (origin) => origin, // Echo origin for credentials support
   credentials: true,
 }));
 
@@ -67,20 +67,30 @@ app.get("/api/portfolio", async (c) => {
 // AUTH: Admin Login
 app.post("/api/auth/login", async (c) => {
   try {
-    const { password } = await c.req.json();
+    const body = await c.req.json().catch(() => ({}));
+    const { password } = body;
+    
+    if (!process.env.ADMIN_PASSWORD) {
+      console.error("ADMIN_PASSWORD is not set in environment variables");
+      return c.json({ error: "Server configuration error: ADMIN_PASSWORD missing" }, 500);
+    }
+
     if (password === process.env.ADMIN_PASSWORD) {
       const token = await createToken({ admin: true });
       setCookie(c, "auth_token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
+        secure: true,
+        sameSite: "None", // Better for cross-subdomain/cross-site
         maxAge: 60 * 60 * 24, // 24 hours
+        path: "/",
       });
       return c.json({ success: true, token });
     }
     return c.json({ error: "Invalid password" }, 401);
-  } catch (error) {
-    return c.json({ error: "Login failed" }, 500);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Internal Server Error";
+    console.error("Login Error:", message);
+    return c.json({ error: "Login failed", details: message }, 500);
   }
 });
 

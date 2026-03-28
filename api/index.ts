@@ -4,7 +4,7 @@ import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { getCookie, setCookie } from "hono/cookie";
-import { db } from "../src/db";
+import { db } from "../src/db/index";
 import { experiences, education, projects, skills, siteSettings } from "../src/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyToken, createToken } from "./auth";

@@ -1,13 +1,22 @@
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Globe, Database, Award } from "lucide-react";
 
+const ICON_MAP: Record<string, any> = {
+  Code,
+  Globe,
+  Database,
+};
+
 export function SkillsSection() {
-  const skillCategories = [
+  const { data } = usePortfolioData();
+  
+  const staticSkillCategories = [
     {
       title: "Programming Languages",
-      icon: Code,
+      icon: "Code",
       skills: [
         { name: "Python", level: 85 },
         { name: "Java", level: 80 },
@@ -19,7 +28,7 @@ export function SkillsSection() {
     },
     {
       title: "Web Development",
-      icon: Globe,
+      icon: "Globe",
       skills: [
         { name: "React", level: 75 },
         { name: "HTML5", level: 90 },
@@ -31,7 +40,7 @@ export function SkillsSection() {
     },
     {
       title: "Data Science & Others",
-      icon: Database,
+      icon: "Database",
       skills: [
         { name: "Machine Learning", level: 70 },
         { name: "DBMS", level: 75 },
@@ -43,13 +52,31 @@ export function SkillsSection() {
     },
   ];
 
-  const certifications = [
+  const staticCertifications = [
     { name: "Python", provider: "Infosys Springboard, HackerRank" },
     { name: "Java", provider: "Infosys Springboard" },
     { name: "Data Structures", provider: "Infosys Springboard" },
     { name: "HTML5 & CSS", provider: "Infosys Springboard" },
     { name: "DBMS", provider: "Infosys Springboard" },
   ];
+
+  // Group skills by category if data is available
+  const skillCategories: any[] = data?.skills ? 
+    Object.values(data.skills.reduce((acc: any, skill: any) => {
+      if (!acc[skill.category]) {
+        acc[skill.category] = {
+          title: skill.category,
+          icon: skill.icon || "Code",
+          skills: [],
+          color: skill.color || "bg-blue-500/20 text-blue-400"
+        };
+      }
+      acc[skill.category].skills.push({ name: skill.name, level: skill.level });
+      return acc;
+    }, {})) : staticSkillCategories;
+
+  const certifications = data?.settings?.certifications ? 
+    JSON.parse(data.settings.certifications) : staticCertifications;
 
   return (
     <section className="py-20 relative">
@@ -69,7 +96,7 @@ export function SkillsSection() {
 
         {/* Skills */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {skillCategories.map((category, index) => (
+          {skillCategories.map((category: any, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
@@ -81,14 +108,18 @@ export function SkillsSection() {
                 <CardHeader className="pb-4">
                   <div className="flex items-center space-x-3">
                     <div className={`p-3 rounded-lg ${category.color} group-hover:scale-110 transition-transform duration-300`}>
-                      <category.icon className="w-6 h-6" />
+                      {(() => {
+                        const IconComponent = typeof category.icon === 'string' ? ICON_MAP[category.icon] || Code : category.icon;
+                        return <IconComponent className="w-6 h-6" />;
+                      })()}
                     </div>
                     <CardTitle className="text-lg text-foreground group-hover:text-primary transition-colors duration-300">{category.title}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {category.skills.map((skill, skillIndex) => (
+                    {category.skills.map((skill: any, skillIndex: number) => (
+
                       <motion.div
                         key={skillIndex}
                         initial={{ opacity: 0, x: -20 }}

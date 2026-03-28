@@ -1,9 +1,13 @@
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, MapPin, Phone, Download } from "lucide-react";
 import GradientText from "../GradientText";
 
 export function HeroSection() {
+  const { data } = usePortfolioData();
+  const s = data?.settings || {};
+
   return (
     <section 
       className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
@@ -27,11 +31,11 @@ export function HeroSection() {
               colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
               animationSpeed={3}
               showBorder={false}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight uppercase"
               id="hero-title"
-              aria-label="Srimanth Adep - Full Stack Developer"
+              aria-label={`${s.hero_name || "Srimanth Adep"} - Full Stack Developer`}
             >
-              SRIMANTH ADEP
+              {s.hero_name || "SRIMANTH ADEP"}
             </GradientText>
           </motion.div>
           
@@ -41,16 +45,16 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 1 }}
             className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
           >
-            Computer Science Engineering in Data Science Student
+            {s.hero_subtitle || "Computer Science Engineering in Data Science Student"}
           </motion.p>
           
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
-            className="text-base sm:text-lg md:text-xl text-primary/80 max-w-2xl mx-auto font-medium leading-relaxed px-4"
+            className="text-base sm:text-lg md:text-xl text-primary/80 max-w-2xl mx-auto font-medium leading-relaxed px-4 italic"
           >
-            "Transforming ideas into elegant, user-centric digital experiences through innovative code and creative problem-solving."
+            "{s.hero_tagline || "Transforming ideas into elegant, user-centric digital experiences through innovative code and creative problem-solving."}"
           </motion.p>
           
           <motion.div
@@ -61,15 +65,15 @@ export function HeroSection() {
           >
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-              <span>Hyderabad, India</span>
+              <span>{s.location || "Hyderabad, India"}</span>
             </div>
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4" />
-              <span>+91 9912885813</span>
+              <span>{s.phone || "+91 9912885813"}</span>
             </div>
-            <a href="mailto:srimanthadep@gmail.com" className="flex items-center gap-2 hover:text-primary transition-colors duration-300">
+            <a href={`mailto:${s.email || "srimanthadep@gmail.com"}`} className="flex items-center gap-2 hover:text-primary transition-colors duration-300">
               <Mail className="w-4 h-4" />
-              <span>srimanthadep@gmail.com</span>
+              <span>{s.email || "srimanthadep@gmail.com"}</span>
             </a>
           </motion.div>
           
@@ -86,10 +90,10 @@ export function HeroSection() {
               className="shadow-glow-primary hover:shadow-glow-primary/80 transition-all duration-300 w-full sm:w-auto group"
             >
               <a 
-                href="https://linkedin.com/in/srimanthadep" 
+                href={s.linkedin || "https://linkedin.com/in/srimanthadep"} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                aria-label="Connect with me on LinkedIn (opens in new tab)"
+                aria-label="Connect with me on LinkedIn"
                 className="flex items-center justify-center"
               >
                 <Linkedin className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
@@ -104,7 +108,6 @@ export function HeroSection() {
             >
               <a 
                 href="#contact"
-                aria-label="Navigate to contact section"
                 className="flex items-center justify-center"
               >
                 <Mail className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
@@ -118,16 +121,14 @@ export function HeroSection() {
               className="backdrop-blur-glass hover:bg-black hover:text-white hover:border-black transition-all duration-300 w-full sm:w-auto group"
             >
               <a 
-                href="/Srimanth_Adep_Resume.pdf" 
+                href={s.resume_url || "/Srimanth_Adep_Resume.pdf"} 
                 download
-                aria-label="Download my resume as PDF"
                 className="flex items-center justify-center"
               >
                 <Download className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
                 Download Resume
               </a>
             </Button>
-
           </motion.div>
         </motion.div>
       </div>

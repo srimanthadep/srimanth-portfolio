@@ -1,3 +1,4 @@
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,14 +6,17 @@ import { Calendar, MapPin, User, Heart } from "lucide-react";
 import GlareHover from "../GlareHover";
 
 export function AboutSection() {
+  const { data } = usePortfolioData();
+  const s = data?.settings || {};
+
   const personalInfo = [
-    { label: "Date of Birth", value: "13/02/2005", icon: Calendar },
-    { label: "Gender", value: "Male", icon: User },
-    { label: "Nationality", value: "Indian", icon: MapPin },
-    { label: "Hobbies", value: "Programming, Learning New Technologies", icon: Heart },
+    { label: "Date of Birth", value: s.dob || "13/02/2005", icon: Calendar },
+    { label: "Gender", value: s.gender || "Male", icon: User },
+    { label: "Nationality", value: s.nationality || "Indian", icon: MapPin },
+    { label: "Hobbies", value: s.hobbies || "Programming, Learning New Technologies", icon: Heart },
   ];
 
-  const languages = ["Telugu", "English", "Hindi"];
+  const languages = s.languages ? s.languages.split(",") : ["Telugu", "English", "Hindi"];
 
   return (
     <section className="py-20 relative">
@@ -56,15 +60,14 @@ export function AboutSection() {
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-semibold mb-6 text-foreground">About Me</h3>
                   <div className="space-y-6 text-muted-foreground leading-relaxed">
-                    <p>
-                      I'm a passionate Computer Science Engineering student specializing in Data Science, with a strong foundation in both theoretical concepts and practical applications. My journey in technology began with a curiosity to understand how data can drive meaningful insights and create impactful solutions.
-                    </p>
-                    <p>
-                      I believe in continuous learning and staying updated with the latest technologies. My goal is to leverage my skills in machine learning, web development, and data analysis to solve real-world problems and contribute to innovative projects that make a difference.
-                    </p>
-                    <p>
-                      When I'm not coding, you'll find me exploring new technologies, participating in hackathons, or collaborating with fellow developers on exciting projects. I'm always eager to take on new challenges and grow both personally and professionally.
-                    </p>
+                    {s.about_me_1 && <p>{s.about_me_1}</p>}
+                    {s.about_me_2 && <p>{s.about_me_2}</p>}
+                    {s.about_me_3 && <p>{s.about_me_3}</p>}
+                    {!s.about_me_1 && (
+                      <p>
+                        I'm a passionate Computer Science Engineering student specializing in Data Science, with a strong foundation in both theoretical concepts and practical applications. My journey in technology began with a curiosity to understand how data can drive meaningful insights and create impactful solutions.
+                      </p>
+                    )}
                   </div>
                   
                   <div className="mt-8">

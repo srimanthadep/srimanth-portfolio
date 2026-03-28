@@ -1,3 +1,4 @@
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,24 +6,32 @@ import { Briefcase, Calendar, MapPin } from "lucide-react";
 import GlareHover from "../GlareHover";
 
 export function ExperienceSection() {
-  const experiences = [
+  const { data } = usePortfolioData();
+  
+  const staticExperiences = [
     {
-      company: "NSS, Hyderabad, India",
-      position: "Volunteer",
-      date: "April 2023 – Current",
+      company: "SmartClient",
+      logo: "/smartclient-logo.png",
+      position: "Founder",
+      date: "2024 – Present",
       location: "Hyderabad, India",
       current: true,
-      technologies: ["Event Management", "Leadership", "Communication"],
-      achievements: ["Led 10+ community service events", "Improved event efficiency by 25%"],
+      technologies: ["SaaS", "CRM", "Analytics", "Automation", "Payment Integrations"],
+      achievements: [
+        "Trusted by 16+ Businesses & Schools",
+        "Powering 6+ schools with custom School Management System",
+        "Managing payments & profits for 10+ businesses"
+      ],
       responsibilities: [
-        "Supported engaging, fun, and smooth-running events through meticulous organization and planning",
-        "Utilized strong interpersonal communication skills to effectively convey information to diverse audiences",
-        "Maintained clean, neat, and operational facilities to serve program needs and ensure optimal functionality",
+        "Founded SmartClient (smartclient.tech), a comprehensive CRM helping Indian businesses manage customer relationships and sales pipelines.",
+        "Developed and deployed core tools including drag-and-drop Sales Pipeline Tracking and a Smart Analytics Dashboard.",
+        "Implemented Workflow Automation for repetitive tasks and Team Collaboration features like shared notes and real-time feeds.",
+        "Created specialized portal management modules for schools (student/fee/staff tracking) and centralized payment transaction tracking for businesses."
       ],
     },
     {
       company: "Kriya, Hyderabad, India",
-      position: "Intern",
+      position: "Event Organiser",
       date: "May 2023 – Mar 2024",
       location: "Hyderabad, India",
       current: false,
@@ -36,6 +45,9 @@ export function ExperienceSection() {
       ],
     },
   ];
+
+  const experiences = data?.experiences || staticExperiences;
+
 
   return (
     <section className="py-20 relative">
@@ -62,15 +74,20 @@ export function ExperienceSection() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
             >
-              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 group ${
-                  exp.current ? 'ring-2 ring-primary' : ''
+              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 group ${exp.current ? 'ring-2 ring-primary' : ''
                 }`} style={{ overflow: 'hidden', borderRadius: '1rem' }}>
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
-                        <Briefcase className="w-6 h-6 text-primary" />
-                      </div>
+                      {exp.logo ? (
+                        <div className="w-14 h-14 shrink-0 flex items-center justify-center self-start -mt-1">
+                          <img src={exp.logo} alt={`${exp.company} logo`} className="w-full h-full object-contain drop-shadow-sm" />
+                        </div>
+                      ) : (
+                        <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
+                          <Briefcase className="w-6 h-6 text-primary" />
+                        </div>
+                      )}
                       <div className="flex-1">
                         <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300">{exp.company}</CardTitle>
                         <p className="text-lg text-muted-foreground mt-1">{exp.position}</p>
@@ -120,7 +137,7 @@ export function ExperienceSection() {
                           ))}
                         </div>
                       </div>
-                      
+
                       {/* Technologies */}
                       <div>
                         <h4 className="font-semibold text-foreground mb-3">Technologies & Skills</h4>
@@ -132,7 +149,7 @@ export function ExperienceSection() {
                           ))}
                         </div>
                       </div>
-                      
+
                       {/* Responsibilities */}
                       <div>
                         <h4 className="font-semibold text-foreground mb-3">Responsibilities</h4>

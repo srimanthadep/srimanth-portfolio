@@ -1,15 +1,25 @@
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Database, Globe, Smartphone, Github, ExternalLink } from "lucide-react";
 
+const ICON_MAP: Record<string, any> = {
+  Code,
+  Database,
+  Globe,
+  Smartphone,
+};
+
 export function ProjectsSection() {
-  const projects = [
+  const { data } = usePortfolioData();
+  
+  const staticProjects = [
     {
       title: "Personal Portfolio Website",
       description: "A modern, responsive portfolio built with React, TypeScript, and Tailwind CSS. Features animated gradients, 3D effects, and smooth scrolling navigation.",
       technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite"],
-      icon: Code,
+      icon: "Code",
       github: "https://github.com/srimanthadep/portfolio",
       demo: "https://srimanthadep.com",
       featured: true,
@@ -18,7 +28,7 @@ export function ProjectsSection() {
       title: "Fake News Detection Using R and ML",
       description: "Developed a machine learning model using R to detect and classify fake news articles, implementing various algorithms to improve accuracy and reliability.",
       technologies: ["R", "Machine Learning", "Data Analysis", "Classification"],
-      icon: Database,
+      icon: "Database",
       github: "https://github.com/srimanthadep/fake-news-detection",
       demo: null,
       featured: true,
@@ -27,12 +37,15 @@ export function ProjectsSection() {
       title: "ShareYourRide – Ride Sharing Platform",
       description: "Created a comprehensive ride sharing platform using HTML, CSS, and JavaScript, featuring user-friendly interfaces and real-time connectivity features.",
       technologies: ["HTML", "CSS", "JavaScript", "Web Development"],
-      icon: Globe,
+      icon: "Globe",
       github: "https://github.com/srimanthadep/shareyourride",
       demo: null,
       featured: false,
     },
   ];
+
+  const projects = data?.projects || staticProjects;
+
 
   return (
     <section className="py-20 relative">
@@ -67,7 +80,10 @@ export function ProjectsSection() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
-                        <project.icon className="w-6 h-6 text-primary" />
+                        {(() => {
+                          const IconComponent = typeof project.icon === 'string' ? ICON_MAP[project.icon] || Code : project.icon;
+                          return <IconComponent className="w-6 h-6 text-primary" />;
+                        })()}
                       </div>
                       <div className="flex-1">
                         <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300">

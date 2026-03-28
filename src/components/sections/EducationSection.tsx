@@ -1,15 +1,17 @@
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Calendar } from "lucide-react";
-import GlareHover from "../GlareHover";
 
 export function EducationSection() {
-  const education = [
+  const { data } = usePortfolioData();
+  
+  const staticEducation = [
     {
       institution: "Anurag University (AU), Hyderabad",
       degree: "B.Tech in Computer Science and Engineering",
-      grade: "CGPA: 7.99",
+      grade: "CGPA: 7.94",
       date: "Expected Mar 2026",
       current: true,
     },
@@ -28,6 +30,9 @@ export function EducationSection() {
       current: false,
     },
   ];
+
+  const education = data?.education || staticEducation;
+
 
   return (
     <section className="py-20 relative">
@@ -55,9 +60,8 @@ export function EducationSection() {
               viewport={{ once: true }}
               className="relative"
             >
-              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 group ${
-                edu.current ? 'ring-2 ring-primary' : ''
-              }`} style={{ overflow: 'hidden', borderRadius: '1rem' }}>
+              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 group ${edu.current ? 'ring-2 ring-primary' : ''
+                }`} style={{ overflow: 'hidden', borderRadius: '1rem' }}>
                 <CardHeader className="pb-4">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-start space-x-4">
@@ -82,7 +86,7 @@ export function EducationSection() {
                     </div>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="pt-0">
                   <div className="text-lg font-semibold text-primary text-left">{edu.grade}</div>
                 </CardContent>

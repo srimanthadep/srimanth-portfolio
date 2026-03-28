@@ -7,6 +7,12 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: true, // Listen on all addresses, including localhost
     port: 8080, // Use port 8080 for both local and network
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     react(),

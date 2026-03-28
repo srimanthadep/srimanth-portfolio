@@ -6,7 +6,7 @@ import { logger } from "hono/logger";
 import { getCookie, setCookie } from "hono/cookie";
 import { db } from "./db.js";
 import { experiences, education, projects, skills, siteSettings } from "./schema.js";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { verifyToken, createToken } from "./auth.js";
 import * as dotenv from "dotenv";
 
@@ -37,9 +37,25 @@ const authMiddleware = async (c: Context, next: Next) => {
 app.get("/api/health", (c) => c.text("OK"));
 
 // Diagnostic Debug Route
-app.get("/api/debug", (c) => {
+app.get("/api/debug", async (c) => {
+  let dbStatus = "Checking...";
+  let dbError = null;
+
+  try {
+    // Try a simple query to verify connection
+    await db.execute(sql`SELECT 1`);
+    dbStatus = "Connected";
+  } catch (err: any) {
+    dbStatus = "Failed";
+    dbError = err.message;
+  }
+
   return c.json({
     status: "OK",
+    database: {
+      status: dbStatus,
+      error: dbError,
+    },
     env: {
       has_db_url: !!process.env.DATABASE_URL,
       has_admin_pass: !!process.env.ADMIN_PASSWORD,

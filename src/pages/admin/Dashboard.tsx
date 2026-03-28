@@ -44,6 +44,10 @@ export default function AdminDashboard() {
     queryKey: ["portfolio"],
     queryFn: async () => {
       const res = await fetch("/api/portfolio");
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to load portfolio data");
+      }
       return res.json();
     },
   });
@@ -230,7 +234,7 @@ export default function AdminDashboard() {
               </Card>
 
               <div className="grid gap-6">
-                {data?.experiences.map((exp) => (
+                {(data?.experiences || []).map((exp) => (
                   <Card key={exp.id} className="bg-card/50 border-border group">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-lg">{exp.company}</CardTitle>
@@ -283,7 +287,7 @@ export default function AdminDashboard() {
               </Card>
 
               <div className="grid md:grid-cols-2 gap-6">
-                {data?.projects.map((proj) => (
+                {(data?.projects || []).map((proj) => (
                   <Card key={proj.id} className="bg-card/50 border-border">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-lg">{proj.title}</CardTitle>
@@ -327,7 +331,7 @@ export default function AdminDashboard() {
               </Card>
 
               <div className="grid gap-6">
-                {data?.education.map((edu) => (
+                {(data?.education || []).map((edu) => (
                   <Card key={edu.id} className="bg-card/50 border-border">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-lg">{edu.institution}</CardTitle>
@@ -373,7 +377,7 @@ export default function AdminDashboard() {
               </Card>
 
               <div className="grid md:grid-cols-3 gap-6">
-                {data?.skills.map((skill) => (
+                {(data?.skills || []).map((skill) => (
                   <Card key={skill.id} className="bg-card/50 border-border">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-bold">{skill.name}</CardTitle>

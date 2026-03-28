@@ -4,10 +4,10 @@ import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { getCookie, setCookie } from "hono/cookie";
-import { db } from "./db";
-import { experiences, education, projects, skills, siteSettings } from "./schema";
+import { db } from "./db.js";
+import { experiences, education, projects, skills, siteSettings } from "./schema.js";
 import { eq } from "drizzle-orm";
-import { verifyToken, createToken } from "./auth";
+import { verifyToken, createToken } from "./auth.js";
 import * as dotenv from "dotenv";
 
 dotenv.config();

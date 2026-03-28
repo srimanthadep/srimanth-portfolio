@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, type Context, type Next } from "hono";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -21,7 +21,7 @@ app.use("*", cors({
 }));
 
 // Auth check middleware
-const authMiddleware = async (c: any, next: any) => {
+const authMiddleware = async (c: Context, next: Next) => {
   const token = getCookie(c, "auth_token") || c.req.header("Authorization")?.split(" ")[1];
   if (!token) return c.json({ error: "Unauthorized" }, 401);
   
@@ -46,7 +46,7 @@ app.get("/api/portfolio", async (c) => {
       db.select().from(siteSettings),
     ]);
 
-    const settingsObj = settings.reduce((acc: any, curr) => {
+    const settingsObj = settings.reduce((acc: Record<string, string>, curr) => {
       acc[curr.key] = curr.value;
       return acc;
     }, {});
@@ -58,8 +58,9 @@ app.get("/api/portfolio", async (c) => {
       skills: sk,
       settings: settingsObj,
     });
-  } catch (error: any) {
-    return c.json({ error: error.message }, 500);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return c.json({ error: message }, 500);
   }
 });
 
@@ -91,14 +92,18 @@ app.post("/api/admin/experiences", authMiddleware, async (c) => {
 });
 
 app.put("/api/admin/experiences/:id", authMiddleware, async (c) => {
-  const id = parseInt(c.req.param("id"));
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   const body = await c.req.json();
   const res = await db.update(experiences).set(body).where(eq(experiences.id, id)).returning();
   return c.json(res[0]);
 });
 
 app.delete("/api/admin/experiences/:id", authMiddleware, async (c) => {
-  const id = parseInt(c.req.param("id"));
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   await db.delete(experiences).where(eq(experiences.id, id));
   return c.json({ success: true });
 });
@@ -111,71 +116,87 @@ app.post("/api/admin/projects", authMiddleware, async (c) => {
 });
 
 app.put("/api/admin/projects/:id", authMiddleware, async (c) => {
-  const id = parseInt(c.req.param("id"));
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   const body = await c.req.json();
   const res = await db.update(projects).set(body).where(eq(projects.id, id)).returning();
   return c.json(res[0]);
 });
 
 app.delete("/api/admin/projects/:id", authMiddleware, async (c) => {
-  const id = parseInt(c.req.param("id"));
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   await db.delete(projects).where(eq(projects.id, id));
   return c.json({ success: true });
 });
 
 // ADMIN: Update Education
-app.post("/api/admin/education", authMiddleware, async (c: any) => {
+app.post("/api/admin/education", authMiddleware, async (c) => {
   const body = await c.req.json();
   const res = await db.insert(education).values(body).returning();
   return c.json(res[0]);
 });
 
-app.put("/api/admin/education/:id", authMiddleware, async (c: any) => {
-  const id = parseInt(c.req.param("id"));
+app.put("/api/admin/education/:id", authMiddleware, async (c) => {
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   const body = await c.req.json();
   const res = await db.update(education).set(body).where(eq(education.id, id)).returning();
   return c.json(res[0]);
 });
 
-app.delete("/api/admin/education/:id", authMiddleware, async (c: any) => {
-  const id = parseInt(c.req.param("id"));
+app.delete("/api/admin/education/:id", authMiddleware, async (c) => {
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   await db.delete(education).where(eq(education.id, id));
   return c.json({ success: true });
 });
 
 // ADMIN: Update Skills
-app.post("/api/admin/skills", authMiddleware, async (c: any) => {
+app.post("/api/admin/skills", authMiddleware, async (c) => {
   const body = await c.req.json();
   const res = await db.insert(skills).values(body).returning();
   return c.json(res[0]);
 });
 
-app.put("/api/admin/skills/:id", authMiddleware, async (c: any) => {
-  const id = parseInt(c.req.param("id"));
+app.put("/api/admin/skills/:id", authMiddleware, async (c) => {
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   const body = await c.req.json();
   const res = await db.update(skills).set(body).where(eq(skills.id, id)).returning();
   return c.json(res[0]);
 });
 
-app.delete("/api/admin/skills/:id", authMiddleware, async (c: any) => {
-  const id = parseInt(c.req.param("id"));
+app.delete("/api/admin/skills/:id", authMiddleware, async (c) => {
+  const idStr = c.req.param("id");
+  if (!idStr) return c.json({ error: "Missing ID" }, 400);
+  const id = parseInt(idStr);
   await db.delete(skills).where(eq(skills.id, id));
   return c.json({ success: true });
 });
 
 // ADMIN: Update Site Settings
-app.put("/api/admin/settings", authMiddleware, async (c: any) => {
-  const body = await c.req.json();
-  for (const [key, value] of Object.entries(body)) {
-    // Check if key exists
-    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, key));
-    if (existing.length > 0) {
-      await db.update(siteSettings).set({ value: value as string }).where(eq(siteSettings.key, key));
-    } else {
-      await db.insert(siteSettings).values({ key, value: value as string });
+app.put("/api/admin/settings", authMiddleware, async (c) => {
+  try {
+    const body = await c.req.json();
+    for (const [key, value] of Object.entries(body)) {
+      const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, key));
+      if (existing.length > 0) {
+        await db.update(siteSettings).set({ value: value as string }).where(eq(siteSettings.key, key));
+      } else {
+        await db.insert(siteSettings).values({ key, value: value as string });
+      }
     }
+    return c.json({ success: true });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Update failed";
+    return c.json({ error: message }, 500);
   }
-  return c.json({ success: true });
 });
 
 // RUN SERVER (For local dev)

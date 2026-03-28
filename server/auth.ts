@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "default-secret");
 
-export async function createToken(payload: any) {
+export async function createToken(payload: Record<string, unknown>) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()

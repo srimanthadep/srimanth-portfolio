@@ -4,7 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Globe, Database, Award } from "lucide-react";
 
-const ICON_MAP: Record<string, any> = {
+interface SkillItem {
+  name: string;
+  level: number;
+}
+
+interface SkillCategory {
+  title: string;
+  icon: string | React.ComponentType<{ className?: string }>;
+  skills: SkillItem[];
+  color: string;
+}
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Code,
   Globe,
   Database,
@@ -13,7 +25,7 @@ const ICON_MAP: Record<string, any> = {
 export function SkillsSection() {
   const { data } = usePortfolioData();
   
-  const staticSkillCategories = [
+  const staticSkillCategories: SkillCategory[] = [
     {
       title: "Programming Languages",
       icon: "Code",
@@ -61,8 +73,8 @@ export function SkillsSection() {
   ];
 
   // Group skills by category if data is available
-  const skillCategories: any[] = data?.skills ? 
-    Object.values(data.skills.reduce((acc: any, skill: any) => {
+  const skillCategories: SkillCategory[] = data?.skills ? 
+    Object.values(data.skills.reduce((acc: Record<string, SkillCategory>, skill) => {
       if (!acc[skill.category]) {
         acc[skill.category] = {
           title: skill.category,
@@ -74,6 +86,7 @@ export function SkillsSection() {
       acc[skill.category].skills.push({ name: skill.name, level: skill.level });
       return acc;
     }, {})) : staticSkillCategories;
+
 
   const certifications = data?.settings?.certifications ? 
     JSON.parse(data.settings.certifications) : staticCertifications;
@@ -96,7 +109,7 @@ export function SkillsSection() {
 
         {/* Skills */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {skillCategories.map((category: any, index) => (
+          {skillCategories.map((category: SkillCategory, index: number) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
@@ -118,8 +131,7 @@ export function SkillsSection() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {category.skills.map((skill: any, skillIndex: number) => (
-
+                    {category.skills.map((skill: SkillItem, skillIndex: number) => (
                       <motion.div
                         key={skillIndex}
                         initial={{ opacity: 0, x: -20 }}
@@ -149,6 +161,7 @@ export function SkillsSection() {
             </motion.div>
           ))}
         </div>
+
 
         {/* Certifications */}
         <motion.div

@@ -1,10 +1,11 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { type Project } from "@/db/schema";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Database, Globe, Smartphone, Github, ExternalLink } from "lucide-react";
 
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Code,
   Database,
   Globe,
@@ -14,8 +15,9 @@ const ICON_MAP: Record<string, any> = {
 export function ProjectsSection() {
   const { data } = usePortfolioData();
   
-  const staticProjects = [
+  const staticProjects: Project[] = [
     {
+      id: 1,
       title: "Personal Portfolio Website",
       description: "A modern, responsive portfolio built with React, TypeScript, and Tailwind CSS. Features animated gradients, 3D effects, and smooth scrolling navigation.",
       technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite"],
@@ -23,8 +25,10 @@ export function ProjectsSection() {
       github: "https://github.com/srimanthadep/portfolio",
       demo: "https://srimanthadep.com",
       featured: true,
+      createdAt: new Date(),
     },
     {
+      id: 2,
       title: "Fake News Detection Using R and ML",
       description: "Developed a machine learning model using R to detect and classify fake news articles, implementing various algorithms to improve accuracy and reliability.",
       technologies: ["R", "Machine Learning", "Data Analysis", "Classification"],
@@ -32,8 +36,10 @@ export function ProjectsSection() {
       github: "https://github.com/srimanthadep/fake-news-detection",
       demo: null,
       featured: true,
+      createdAt: new Date(),
     },
     {
+      id: 3,
       title: "ShareYourRide – Ride Sharing Platform",
       description: "Created a comprehensive ride sharing platform using HTML, CSS, and JavaScript, featuring user-friendly interfaces and real-time connectivity features.",
       technologies: ["HTML", "CSS", "JavaScript", "Web Development"],
@@ -41,6 +47,7 @@ export function ProjectsSection() {
       github: "https://github.com/srimanthadep/shareyourride",
       demo: null,
       featured: false,
+      createdAt: new Date(),
     },
   ];
 

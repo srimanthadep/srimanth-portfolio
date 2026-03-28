@@ -1,4 +1,5 @@
 import { pgTable, serial, text, varchar, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { type InferSelectModel } from "drizzle-orm";
 
 export const experiences = pgTable("experiences", {
   id: serial("id").primaryKey(),
@@ -15,6 +16,8 @@ export const experiences = pgTable("experiences", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export type Experience = InferSelectModel<typeof experiences>;
+
 export const education = pgTable("education", {
   id: serial("id").primaryKey(),
   institution: varchar("institution", { length: 255 }).notNull(),
@@ -24,6 +27,8 @@ export const education = pgTable("education", {
   current: boolean("current").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export type Education = InferSelectModel<typeof education>;
 
 export const projects = pgTable("projects", {
   id: serial("id").primaryKey(),
@@ -37,12 +42,19 @@ export const projects = pgTable("projects", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export type Project = InferSelectModel<typeof projects>;
+
 export const skills = pgTable("skills", {
   id: serial("id").primaryKey(),
   category: varchar("category", { length: 100 }).notNull(),
-  items: text("items").array().notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  level: serial("level").notNull(), // 0-100
+  icon: varchar("icon", { length: 50 }), // lucide icon name
+  color: varchar("color", { length: 50 }), // tailwind color class
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export type Skill = InferSelectModel<typeof skills>;
 
 export const siteSettings = pgTable("site_settings", {
   id: serial("id").primaryKey(),
@@ -50,3 +62,6 @@ export const siteSettings = pgTable("site_settings", {
   value: text("value").notNull(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+export type SiteSetting = InferSelectModel<typeof siteSettings>;
+

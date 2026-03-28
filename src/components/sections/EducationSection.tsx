@@ -1,4 +1,5 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { type Education } from "@/db/schema";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,27 +8,33 @@ import { GraduationCap, Calendar } from "lucide-react";
 export function EducationSection() {
   const { data } = usePortfolioData();
   
-  const staticEducation = [
+  const staticEducation: Education[] = [
     {
+      id: 1,
       institution: "Anurag University (AU), Hyderabad",
       degree: "B.Tech in Computer Science and Engineering",
       grade: "CGPA: 7.94",
       date: "Expected Mar 2026",
       current: true,
+      createdAt: new Date(),
     },
     {
+      id: 2,
       institution: "Sri Gayatri Jr College, Hyderabad",
       degree: "Intermediate",
       grade: "Percentage: 72.4%",
       date: "May 2022",
       current: false,
+      createdAt: new Date(),
     },
     {
+      id: 3,
       institution: "Bhashyam High School, Hyderabad",
       degree: "SSC",
       grade: "CGPA: 9.5",
       date: "Mar 2020",
       current: false,
+      createdAt: new Date(),
     },
   ];
 

@@ -19,11 +19,13 @@ import {
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { type Experience, type Education, type Project, type Skill } from "@/db/schema";
+
 interface PortfolioData {
-  experiences: any[];
-  education: any[];
-  projects: any[];
-  skills: any[];
+  experiences: Experience[];
+  education: Education[];
+  projects: Project[];
+  skills: Skill[];
   settings: Record<string, string>;
 }
 
@@ -47,7 +49,7 @@ export default function AdminDashboard() {
   });
 
   const updateSettingsMutation = useMutation({
-    mutationFn: async (settings: any) => {
+    mutationFn: async (settings: Record<string, string | string[] | boolean | number>) => {
       const res = await fetch("/api/admin/settings", {
         method: "PUT",
         headers: { 
@@ -65,7 +67,7 @@ export default function AdminDashboard() {
   });
 
   const crudMutation = useMutation({
-    mutationFn: async ({ entity, method, id, body }: { entity: string, method: string, id?: number, body?: any }) => {
+    mutationFn: async ({ entity, method, id, body }: { entity: string, method: string, id?: number, body?: Record<string, string | string[] | boolean | number> }) => {
       const url = `/api/admin/${entity}${id ? `/${id}` : ""}`;
       const res = await fetch(url, {
         method,
@@ -89,7 +91,7 @@ export default function AdminDashboard() {
     navigate("/admin/login");
   };
 
-  const [editingItem, setEditingItem] = useState<{ type: string, item: any } | null>(null);
+  const [editingItem, setEditingItem] = useState<{ type: string, item: Experience | Project | Education | Skill } | null>(null);
 
   if (isLoading) return <div className="flex items-center justify-center min-h-screen"><Loader2 className="w-10 h-10 animate-spin" /></div>;
   if (error) return <div>Error loading data</div>;
@@ -145,7 +147,7 @@ export default function AdminDashboard() {
                 <form onSubmit={(e) => {
                   e.preventDefault();
                   const formData = new FormData(e.currentTarget);
-                  const settings = Object.fromEntries(formData.entries());
+                  const settings = Object.fromEntries(formData.entries()) as Record<string, string>;
                   updateSettingsMutation.mutate(settings);
                 }} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
@@ -199,7 +201,7 @@ export default function AdminDashboard() {
                   <form onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.currentTarget);
-                    const body = Object.fromEntries(formData.entries());
+                    const body = Object.fromEntries(formData.entries()) as Record<string, string>;
                     // Convert achievements/responsibilities strings to JSON arrays
                     const formattedBody = {
                       ...body,
@@ -208,7 +210,7 @@ export default function AdminDashboard() {
                       technologies: (body.technologies as string).split(","),
                       current: body.current === "on"
                     };
-                    crudMutation.mutate({ entity: "experiences", method: "POST", body: formattedBody });
+                    crudMutation.mutate({ entity: "experiences", method: "POST", body: formattedBody as Record<string, string | string[] | boolean | number> });
                     e.currentTarget.reset();
                   }} className="space-y-4">
                     <div className="grid md:grid-cols-2 gap-4">
@@ -256,13 +258,13 @@ export default function AdminDashboard() {
                   <form onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.currentTarget);
-                    const body = Object.fromEntries(formData.entries());
+                    const body = Object.fromEntries(formData.entries()) as Record<string, string>;
                     const formattedBody = {
                       ...body,
                       technologies: (body.technologies as string).split(","),
                       featured: body.featured === "on"
                     };
-                    crudMutation.mutate({ entity: "projects", method: "POST", body: formattedBody });
+                    crudMutation.mutate({ entity: "projects", method: "POST", body: formattedBody as Record<string, string | string[] | boolean | number> });
                     e.currentTarget.reset();
                   }} className="space-y-4">
                     <div className="grid md:grid-cols-2 gap-4">
@@ -309,8 +311,8 @@ export default function AdminDashboard() {
                   <form onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.currentTarget);
-                    const body = Object.fromEntries(formData.entries());
-                    crudMutation.mutate({ entity: "education", method: "POST", body: { ...body, current: body.current === "on" } });
+                    const body = Object.fromEntries(formData.entries()) as Record<string, string>;
+                    crudMutation.mutate({ entity: "education", method: "POST", body: { ...body, current: body.current === "on" } as Record<string, string | string[] | boolean | number> });
                     e.currentTarget.reset();
                   }} className="space-y-4">
                     <Input name="institution" placeholder="Institution" required />
@@ -353,8 +355,8 @@ export default function AdminDashboard() {
                   <form onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.currentTarget);
-                    const body = Object.fromEntries(formData.entries());
-                    crudMutation.mutate({ entity: "skills", method: "POST", body: { ...body, level: parseInt(body.level as string) } });
+                    const body = Object.fromEntries(formData.entries()) as Record<string, string>;
+                    crudMutation.mutate({ entity: "skills", method: "POST", body: { ...body, level: parseInt(body.level as string) } as Record<string, string | string[] | boolean | number> });
                     e.currentTarget.reset();
                   }} className="space-y-4">
                     <div className="grid md:grid-cols-2 gap-4">

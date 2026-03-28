@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { type Experience, type Education, type Project, type Skill } from "@/db/schema";
 
 export interface PortfolioData {
-  experiences: any[];
-  education: any[];
-  projects: any[];
-  skills: any[];
+  experiences: Experience[];
+  education: Education[];
+  projects: Project[];
+  skills: Skill[];
   settings: Record<string, string>;
 }
 

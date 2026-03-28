@@ -1,4 +1,5 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { type Experience } from "@/db/schema";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +9,9 @@ import GlareHover from "../GlareHover";
 export function ExperienceSection() {
   const { data } = usePortfolioData();
   
-  const staticExperiences = [
+  const staticExperiences: Experience[] = [
     {
+      id: 1,
       company: "SmartClient",
       logo: "/smartclient-logo.png",
       position: "Founder",
@@ -28,9 +30,13 @@ export function ExperienceSection() {
         "Implemented Workflow Automation for repetitive tasks and Team Collaboration features like shared notes and real-time feeds.",
         "Created specialized portal management modules for schools (student/fee/staff tracking) and centralized payment transaction tracking for businesses."
       ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
+      id: 2,
       company: "Kriya, Hyderabad, India",
+      logo: "",
       position: "Event Organiser",
       date: "May 2023 – Mar 2024",
       location: "Hyderabad, India",
@@ -43,6 +49,8 @@ export function ExperienceSection() {
         "Explored new technologies and approaches to streamline processes and enhance productivity",
         "Participated in workshops and presentations related to projects to gain comprehensive knowledge",
       ],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   ];
 

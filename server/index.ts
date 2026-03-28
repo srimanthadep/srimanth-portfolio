@@ -35,6 +35,19 @@ const authMiddleware = async (c: Context, next: Next) => {
 // API Routes
 app.get("/api/health", (c) => c.text("OK"));
 
+// Diagnostic Debug Route
+app.get("/api/debug", (c) => {
+  return c.json({
+    status: "OK",
+    env: {
+      has_db_url: !!process.env.DATABASE_URL,
+      has_admin_pass: !!process.env.ADMIN_PASSWORD,
+      has_jwt_secret: !!process.env.JWT_SECRET,
+      node_env: process.env.NODE_ENV,
+    }
+  });
+});
+
 // PUBLIC: Get all portfolio data
 app.get("/api/portfolio", async (c) => {
   try {

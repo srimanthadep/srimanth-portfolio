@@ -32,22 +32,18 @@ const App = () => {
             <BrowserRouter>
               <Analytics />
               <Routes>
-                {isAdminSubdomain ? (
-                  <>
-                    <Route path="/" element={<AdminLogin />} />
-                    <Route path="/login" element={<AdminLogin />} />
-                    <Route path="/dashboard" element={<AdminDashboard />} />
-                    <Route path="*" element={<AdminLogin />} />
-                  </>
-                ) : (
-                  <>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/admin" element={<AdminLogin />} />
-                    <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                    <Route path="*" element={<NotFound />} />
-                  </>
-                )}
+                {/* Home/Login based on subdomain */}
+                <Route path="/" element={isAdminSubdomain ? <AdminLogin /> : <Index />} />
+                
+                {/* Unified Admin Routes */}
+                <Route path="/admin" element={<AdminLogin />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/login" element={<AdminLogin />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/dashboard" element={<AdminDashboard />} />
+                
+                {/* Fallback */}
+                <Route path="*" element={isAdminSubdomain ? <AdminLogin /> : <NotFound />} />
               </Routes>
             </BrowserRouter>
           </TooltipProvider>

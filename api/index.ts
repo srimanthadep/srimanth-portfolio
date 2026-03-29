@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "dotenv/config";
 import { Hono, type Context, type Next } from "hono";
 import { handle } from "@hono/node-server/vercel";
@@ -248,7 +249,7 @@ app.delete("/api/admin/resume/delete", authMiddleware, async (c) => {
       const filePath = path.join(process.cwd(), "public", fileName);
       try {
         await fs.unlink(filePath);
-      } catch (e) {}
+      } catch (e) { console.warn("Local file not found:", e); }
     }
     
     await q.docs[0].ref.update({ value: "", updatedAt: new Date() });

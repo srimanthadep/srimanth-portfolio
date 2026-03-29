@@ -1,23 +1,22 @@
+import "dotenv/config";
 import { Hono, type Context, type Next } from "hono";
 import { handle } from "@hono/node-server/vercel";
 import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { getCookie, setCookie } from "hono/cookie";
-import { db } from "./db.js";
-import { experiences, education, projects, skills, siteSettings } from "./schema.js";
-import { eq, sql } from "drizzle-orm";
+import { db } from "./firebase.js";
 import { verifyToken, createToken } from "./auth.js";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import fs from "node:fs/promises";
+import path from "node:path";
+import { put, del } from "@vercel/blob";
 
 const app = new Hono();
 
 // Middlewares
 app.use("*", logger());
 app.use("*", cors({
-  origin: (origin) => origin, // Echo origin for credentials support
+  origin: (origin) => origin,
   credentials: true,
 }));
 
@@ -42,8 +41,7 @@ app.get("/api/debug", async (c) => {
   let dbError = null;
 
   try {
-    // Try a simple query to verify connection
-    await db.execute(sql`SELECT 1`);
+    await db.listCollections();
     dbStatus = "Connected";
   } catch (err: any) {
     dbStatus = "Failed";
@@ -57,27 +55,33 @@ app.get("/api/debug", async (c) => {
       error: dbError,
     },
     env: {
-      has_db_url: !!process.env.DATABASE_URL,
+      has_firebase_project: !!process.env.FIREBASE_PROJECT_ID,
       has_admin_pass: !!process.env.ADMIN_PASSWORD,
-      has_jwt_secret: !!process.env.JWT_SECRET,
       node_env: process.env.NODE_ENV,
     }
   });
 });
 
+// Helper to get all docs from a collection
+async function getCollectionDocs(collectionName: string) {
+  const snapshot = await db.collection(collectionName).get();
+  return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+}
+
 // PUBLIC: Get all portfolio data
 app.get("/api/portfolio", async (c) => {
   try {
-    const [exp, edu, proj, sk, settings] = await Promise.all([
-      db.select().from(experiences).orderBy(experiences.id),
-      db.select().from(education).orderBy(education.id),
-      db.select().from(projects).orderBy(projects.id),
-      db.select().from(skills).orderBy(skills.id),
-      db.select().from(siteSettings),
+    const [exp, edu, proj, sk, settingsSnapshot] = await Promise.all([
+      getCollectionDocs("experiences"),
+      getCollectionDocs("education"),
+      getCollectionDocs("projects"),
+      getCollectionDocs("skills"),
+      db.collection("site_settings").get(),
     ]);
 
-    const settingsObj = settings.reduce((acc: Record<string, string>, curr) => {
-      acc[curr.key] = curr.value;
+    const settingsObj = settingsSnapshot.docs.reduce((acc: Record<string, string>, doc: any) => {
+      const data = doc.data();
+      acc[data.key] = data.value;
       return acc;
     }, {});
 
@@ -101,7 +105,6 @@ app.post("/api/auth/login", async (c) => {
     const { password } = body;
     
     if (!process.env.ADMIN_PASSWORD) {
-      console.error("ADMIN_PASSWORD is not set in environment variables");
       return c.json({ error: "Server configuration error: ADMIN_PASSWORD missing" }, 500);
     }
 
@@ -109,9 +112,9 @@ app.post("/api/auth/login", async (c) => {
       const token = await createToken({ admin: true });
       setCookie(c, "auth_token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "None", // Better for cross-subdomain/cross-site
-        maxAge: 60 * 60 * 24, // 24 hours
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
+        maxAge: 60 * 60 * 24,
         path: "/",
       });
       return c.json({ success: true, token });
@@ -119,123 +122,140 @@ app.post("/api/auth/login", async (c) => {
     return c.json({ error: "Invalid password" }, 401);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Internal Server Error";
-    console.error("Login Error:", message);
     return c.json({ error: "Login failed", details: message }, 500);
   }
 });
 
-// ADMIN: Update Experiences
-app.post("/api/admin/experiences", authMiddleware, async (c) => {
-  const body = await c.req.json();
-  const res = await db.insert(experiences).values(body).returning();
-  return c.json(res[0]);
-});
+// GENERIC ADMIN CRUD HELPERS
+const handleAdminAction = async (c: Context, collection: string, method: string) => {
+  try {
+    const id = c.req.param("id");
+    const body = await c.req.json();
+    
+    if (method === "POST") {
+      const docRef = await db.collection(collection).add({ ...body, createdAt: new Date() });
+      const doc = await docRef.get();
+      return c.json({ id: doc.id, ...doc.data() });
+    }
+    
+    if (method === "PUT" && id) {
+      await db.collection(collection).doc(id).update({ ...body, updatedAt: new Date() });
+      const doc = await db.collection(collection).doc(id).get();
+      return c.json({ id: doc.id, ...doc.data() });
+    }
+    
+    if (method === "DELETE" && id) {
+      await db.collection(collection).doc(id).delete();
+      return c.json({ success: true });
+    }
+    
+    return c.json({ error: "Invalid request" }, 400);
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500);
+  }
+};
 
-app.put("/api/admin/experiences/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  const body = await c.req.json();
-  const res = await db.update(experiences).set(body).where(eq(experiences.id, id)).returning();
-  return c.json(res[0]);
-});
+// ADMIN: CRUD Endpoints
+app.post("/api/admin/experiences", authMiddleware, (c) => handleAdminAction(c, "experiences", "POST"));
+app.put("/api/admin/experiences/:id", authMiddleware, (c) => handleAdminAction(c, "experiences", "PUT"));
+app.delete("/api/admin/experiences/:id", authMiddleware, (c) => handleAdminAction(c, "experiences", "DELETE"));
 
-app.delete("/api/admin/experiences/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  await db.delete(experiences).where(eq(experiences.id, id));
-  return c.json({ success: true });
-});
+app.post("/api/admin/projects", authMiddleware, (c) => handleAdminAction(c, "projects", "POST"));
+app.put("/api/admin/projects/:id", authMiddleware, (c) => handleAdminAction(c, "projects", "PUT"));
+app.delete("/api/admin/projects/:id", authMiddleware, (c) => handleAdminAction(c, "projects", "DELETE"));
 
-// ADMIN: Update Projects
-app.post("/api/admin/projects", authMiddleware, async (c) => {
-  const body = await c.req.json();
-  const res = await db.insert(projects).values(body).returning();
-  return c.json(res[0]);
-});
+app.post("/api/admin/education", authMiddleware, (c) => handleAdminAction(c, "education", "POST"));
+app.put("/api/admin/education/:id", authMiddleware, (c) => handleAdminAction(c, "education", "PUT"));
+app.delete("/api/admin/education/:id", authMiddleware, (c) => handleAdminAction(c, "education", "DELETE"));
 
-app.put("/api/admin/projects/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  const body = await c.req.json();
-  const res = await db.update(projects).set(body).where(eq(projects.id, id)).returning();
-  return c.json(res[0]);
-});
-
-app.delete("/api/admin/projects/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  await db.delete(projects).where(eq(projects.id, id));
-  return c.json({ success: true });
-});
-
-// ADMIN: Update Education
-app.post("/api/admin/education", authMiddleware, async (c) => {
-  const body = await c.req.json();
-  const res = await db.insert(education).values(body).returning();
-  return c.json(res[0]);
-});
-
-app.put("/api/admin/education/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  const body = await c.req.json();
-  const res = await db.update(education).set(body).where(eq(education.id, id)).returning();
-  return c.json(res[0]);
-});
-
-app.delete("/api/admin/education/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  await db.delete(education).where(eq(education.id, id));
-  return c.json({ success: true });
-});
-
-// ADMIN: Update Skills
-app.post("/api/admin/skills", authMiddleware, async (c) => {
-  const body = await c.req.json();
-  const res = await db.insert(skills).values(body).returning();
-  return c.json(res[0]);
-});
-
-app.put("/api/admin/skills/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  const body = await c.req.json();
-  const res = await db.update(skills).set(body).where(eq(skills.id, id)).returning();
-  return c.json(res[0]);
-});
-
-app.delete("/api/admin/skills/:id", authMiddleware, async (c) => {
-  const idStr = c.req.param("id");
-  if (!idStr) return c.json({ error: "Missing ID" }, 400);
-  const id = parseInt(idStr);
-  await db.delete(skills).where(eq(skills.id, id));
-  return c.json({ success: true });
-});
+app.post("/api/admin/skills", authMiddleware, (c) => handleAdminAction(c, "skills", "POST"));
+app.put("/api/admin/skills/:id", authMiddleware, (c) => handleAdminAction(c, "skills", "PUT"));
+app.delete("/api/admin/skills/:id", authMiddleware, (c) => handleAdminAction(c, "skills", "DELETE"));
 
 // ADMIN: Update Site Settings
 app.put("/api/admin/settings", authMiddleware, async (c) => {
   try {
     const body = await c.req.json();
+    const batch = db.batch();
+    
     for (const [key, value] of Object.entries(body)) {
-      const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, key));
-      if (existing.length > 0) {
-        await db.update(siteSettings).set({ value: value as string }).where(eq(siteSettings.key, key));
+      const q = await db.collection("site_settings").where("key", "==", key).get();
+      if (!q.empty) {
+        batch.update(q.docs[0].ref, { value, updatedAt: new Date() });
       } else {
-        await db.insert(siteSettings).values({ key, value: value as string });
+        const docRef = db.collection("site_settings").doc();
+        batch.set(docRef, { key, value, createdAt: new Date() });
       }
     }
+    
+    await batch.commit();
     return c.json({ success: true });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Update failed";
-    return c.json({ error: message }, 500);
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500);
+  }
+});
+
+// ADMIN: Resume File Management (Vercel Blob)
+app.post("/api/admin/resume/upload", authMiddleware, async (c) => {
+  try {
+    const body = await c.req.parseBody();
+    const file = body["file"] as File;
+    
+    if (!file) return c.json({ error: "No file uploaded" }, 400);
+    
+    // Upload to Vercel Blob
+    const blob = await put(file.name || "resume.pdf", file, {
+      access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN
+    });
+    
+    const publicUrl = blob.url;
+    
+    // Update settings in Firestore
+    const q = await db.collection("site_settings").where("key", "==", "resume_url").get();
+    if (!q.empty) {
+      await q.docs[0].ref.update({ value: publicUrl, updatedAt: new Date() });
+    } else {
+      await db.collection("site_settings").add({ key: "resume_url", value: publicUrl, createdAt: new Date() });
+    }
+    
+    return c.json({ success: true, url: publicUrl });
+  } catch (error: any) {
+    console.error("Vercel Blob upload error:", error.message);
+    return c.json({ error: error.message }, 500);
+  }
+});
+
+app.delete("/api/admin/resume/delete", authMiddleware, async (c) => {
+  try {
+    const q = await db.collection("site_settings").where("key", "==", "resume_url").get();
+    if (q.empty || !q.docs[0].data().value) {
+      return c.json({ error: "No resume found to delete" }, 404);
+    }
+    
+    const resumeUrl = q.docs[0].data().value;
+    
+    // Delete from Vercel Blob if it's a blob URL
+    if (resumeUrl.includes("vercel-storage.com")) {
+      try {
+        await del(resumeUrl, { token: process.env.BLOB_READ_WRITE_TOKEN });
+      } catch (e: any) {
+        console.warn("Vercel Blob delete failed or file not found:", e.message);
+      }
+    } else {
+      // Cleanup local file if it was still there (legacy)
+      const fileName = resumeUrl.startsWith("/") ? resumeUrl.slice(1) : resumeUrl;
+      const filePath = path.join(process.cwd(), "public", fileName);
+      try {
+        await fs.unlink(filePath);
+      } catch (e) {}
+    }
+    
+    await q.docs[0].ref.update({ value: "", updatedAt: new Date() });
+    
+    return c.json({ success: true });
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500);
   }
 });
 

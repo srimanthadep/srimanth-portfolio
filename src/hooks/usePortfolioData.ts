@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { type Experience, type Education, type Project, type Skill } from "../../../../../../../../../api/schema";
+import { type Experience, type Education, type Project, type Skill } from "../types/portfolio";
 
 export interface PortfolioData {
   experiences: Experience[];

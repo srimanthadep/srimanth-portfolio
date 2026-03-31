@@ -1,10 +1,19 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
-import { type Experience } from "../../../../../../../../../../api/schema";
+import { type Experience } from "@/types/portfolio";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
 import GlareHover from "../GlareHover";
+
+const BADGE_COLORS = [
+  "bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 border-blue-500/30",
+  "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 border-purple-500/30",
+  "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border-emerald-500/30",
+  "bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border-amber-500/30",
+  "bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border-rose-500/30",
+  "bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 border-cyan-500/30",
+];
 
 export function ExperienceSection() {
   const { data } = usePortfolioData();
@@ -30,8 +39,8 @@ export function ExperienceSection() {
         "Implemented Workflow Automation for repetitive tasks and Team Collaboration features like shared notes and real-time feeds.",
         "Created specialized portal management modules for schools (student/fee/staff tracking) and centralized payment transaction tracking for businesses."
       ],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
     {
       id: 2,
@@ -49,8 +58,8 @@ export function ExperienceSection() {
         "Explored new technologies and approaches to streamline processes and enhance productivity",
         "Participated in workshops and presentations related to projects to gain comprehensive knowledge",
       ],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
   ];
 
@@ -150,11 +159,14 @@ export function ExperienceSection() {
                       <div>
                         <h4 className="font-semibold text-foreground mb-3">Technologies & Skills</h4>
                         <div className="flex flex-wrap gap-2 mb-4">
-                          {exp.technologies.map((tech, techIndex) => (
-                            <Badge key={techIndex} variant="secondary" className="bg-accent/20 text-accent-foreground hover:bg-accent/30 transition-colors duration-300">
-                              {tech}
-                            </Badge>
-                          ))}
+                          {exp.technologies.map((tech, techIndex) => {
+                            const colorClass = BADGE_COLORS[techIndex % BADGE_COLORS.length];
+                            return (
+                              <Badge key={techIndex} variant="outline" className={`transition-colors duration-300 ${colorClass}`}>
+                                {tech}
+                              </Badge>
+                            );
+                          })}
                         </div>
                       </div>
 

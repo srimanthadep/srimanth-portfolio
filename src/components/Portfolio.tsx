@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Scene3D } from "./Scene3D";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { Navigation } from "./Navigation";
 import { HeroSection } from "./sections/HeroSection";
 import { AboutSection } from "./sections/AboutSection";
@@ -9,29 +8,33 @@ import { ProjectsSection } from "./sections/ProjectsSection";
 import { SkillsSection } from "./sections/SkillsSection";
 import { ContactSection } from "./sections/ContactSection";
 import { BackToTop } from "./BackToTop";
+import { ErrorBoundary } from "./ErrorBoundary";
+
+const Scene3D = lazy(() => import("./Scene3D").then((module) => ({ default: module.Scene3D })));
 
 export function Portfolio() {
   const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['hero', 'about', 'education', 'experience', 'projects', 'skills', 'contact'];
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
+    const sections = ['hero', 'about', 'education', 'experience', 'projects', 'skills', 'contact'];
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
         }
-      }
-    };
+      });
+    }, {
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    });
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    sections.forEach((section) => {
+      const element = document.getElementById(section);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -43,7 +46,11 @@ export function Portfolio() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
-      <Scene3D />
+      <ErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <Scene3D />
+        </Suspense>
+      </ErrorBoundary>
       <Navigation activeSection={activeSection} onSectionChange={scrollToSection} />
       
       <div id="hero">

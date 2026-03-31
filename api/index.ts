@@ -99,9 +99,26 @@ app.get("/api/portfolio", async (c) => {
   }
 });
 
+// Simple in-memory rate limiter for login
+const loginAttempts = new Map<string, { count: number, resetTime: number }>();
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOGIN_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 mins
+
 // AUTH: Admin Login
 app.post("/api/auth/login", async (c) => {
   try {
+    const ip = c.req.header("x-forwarded-for") || "unknown";
+    const now = Date.now();
+    const attempts = loginAttempts.get(ip);
+    
+    if (attempts && now < attempts.resetTime) {
+      if (attempts.count >= MAX_LOGIN_ATTEMPTS) {
+        return c.json({ error: "Too many login attempts. Please try again later." }, 429);
+      }
+    } else if (attempts && now > attempts.resetTime) {
+      loginAttempts.delete(ip);
+    }
+
     const body = await c.req.json().catch(() => ({}));
     const { password } = body;
     
@@ -111,6 +128,8 @@ app.post("/api/auth/login", async (c) => {
 
     if (password === process.env.ADMIN_PASSWORD) {
       const token = await createToken({ admin: true });
+      loginAttempts.delete(ip);
+      
       setCookie(c, "auth_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -120,6 +139,11 @@ app.post("/api/auth/login", async (c) => {
       });
       return c.json({ success: true, token });
     }
+    
+    const currentAttempts = loginAttempts.get(ip) || { count: 0, resetTime: now + LOGIN_RATE_LIMIT_WINDOW_MS };
+    currentAttempts.count += 1;
+    loginAttempts.set(ip, currentAttempts);
+
     return c.json({ error: "Invalid password" }, 401);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Internal Server Error";
@@ -151,8 +175,9 @@ const handleAdminAction = async (c: Context, collection: string, method: string)
     }
     
     return c.json({ error: "Invalid request" }, 400);
-  } catch (error: any) {
-    return c.json({ error: error.message }, 500);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return c.json({ error: message }, 500);
   }
 };
 

@@ -15,12 +15,10 @@ import { Analytics } from "./components/Analytics";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const isAdminSubdomain = typeof window !== 'undefined' && window.location.hostname.startsWith('admin.');
-
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <TooltipProvider>
             {/* Skip to content link for accessibility */}
             <a href="#main-content" className="skip-link">
@@ -32,8 +30,8 @@ const App = () => {
             <BrowserRouter>
               <Analytics />
               <Routes>
-                {/* Home/Login based on subdomain */}
-                <Route path="/" element={isAdminSubdomain ? <AdminLogin /> : <Index />} />
+                {/* Main Route */}
+                <Route path="/" element={<Index />} />
                 
                 {/* Unified Admin Routes */}
                 <Route path="/admin" element={<AdminLogin />} />
@@ -43,7 +41,7 @@ const App = () => {
                 <Route path="/dashboard" element={<AdminDashboard />} />
                 
                 {/* Fallback */}
-                <Route path="*" element={isAdminSubdomain ? <AdminLogin /> : <NotFound />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
           </TooltipProvider>

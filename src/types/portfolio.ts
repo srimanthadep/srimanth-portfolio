@@ -32,6 +32,7 @@ export interface Project {
   github?: string | null;
   demo?: string | null;
   featured?: boolean;
+  image?: string | null;
   createdAt?: string;
 }
 

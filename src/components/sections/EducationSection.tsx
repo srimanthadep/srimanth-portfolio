@@ -1,9 +1,9 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
-import { type Education } from "../../../../../../../../../../api/schema";
+import { type Education } from "@/types/portfolio";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Calendar } from "lucide-react";
+import { GraduationCap, Calendar, Building2, BookOpen, School } from "lucide-react";
 
 export function EducationSection() {
   const { data } = usePortfolioData();
@@ -16,7 +16,7 @@ export function EducationSection() {
       grade: "CGPA: 7.94",
       date: "Expected Mar 2026",
       current: true,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     },
     {
       id: 2,
@@ -25,7 +25,7 @@ export function EducationSection() {
       grade: "Percentage: 72.4%",
       date: "May 2022",
       current: false,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     },
     {
       id: 3,
@@ -34,7 +34,7 @@ export function EducationSection() {
       grade: "CGPA: 9.5",
       date: "Mar 2020",
       current: false,
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
     },
   ];
 
@@ -72,12 +72,25 @@ export function EducationSection() {
                 <CardHeader className="pb-4">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-start space-x-4">
-                      <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300 flex-shrink-0">
-                        <GraduationCap className="w-6 h-6 text-primary" />
-                      </div>
+                      {edu.institution.includes("Anurag") ? (
+                        <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex flex-shrink-0 items-center justify-center font-bold text-blue-400 border border-blue-500/30 shadow-inner">
+                          <Building2 className="w-6 h-6" />
+                        </div>
+                      ) : edu.institution.includes("Gayatri") ? (
+                        <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex flex-shrink-0 items-center justify-center font-bold text-purple-400 border border-purple-500/30 shadow-inner">
+                          <BookOpen className="w-6 h-6" />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex flex-shrink-0 items-center justify-center font-bold text-emerald-400 border border-emerald-500/30 shadow-inner">
+                          <School className="w-6 h-6" />
+                        </div>
+                      )}
+                      
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300">{edu.institution}</CardTitle>
-                        <p className="text-muted-foreground mt-1">{edu.degree}</p>
+                        <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300 leading-tight">
+                          {edu.institution}
+                        </CardTitle>
+                        <p className="text-muted-foreground mt-2">{edu.degree}</p>
                       </div>
                     </div>
                     <div className="flex flex-col items-start sm:items-end space-y-2 flex-shrink-0">

@@ -1,5 +1,5 @@
 import { usePortfolioData } from "@/hooks/usePortfolioData";
-import { type Project } from "../../../../../../../../../../api/schema";
+import { type Project } from "@/types/portfolio";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +25,8 @@ export function ProjectsSection() {
       github: "https://github.com/srimanthadep/portfolio",
       demo: "https://srimanthadep.com",
       featured: true,
-      createdAt: new Date(),
+      image: "/projects/project-1.png",
+      createdAt: new Date().toISOString(),
     },
     {
       id: 2,
@@ -36,7 +37,8 @@ export function ProjectsSection() {
       github: "https://github.com/srimanthadep/fake-news-detection",
       demo: null,
       featured: true,
-      createdAt: new Date(),
+      image: "/projects/project-2.png",
+      createdAt: new Date().toISOString(),
     },
     {
       id: 3,
@@ -47,7 +49,8 @@ export function ProjectsSection() {
       github: "https://github.com/srimanthadep/shareyourride",
       demo: null,
       featured: false,
-      createdAt: new Date(),
+      image: "/projects/project-3.png",
+      createdAt: new Date().toISOString(),
     },
   ];
 
@@ -80,10 +83,20 @@ export function ProjectsSection() {
               viewport={{ once: true }}
               className={`group ${project.featured ? 'md:col-span-2' : ''}`}
             >
-              <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full group-hover:scale-[1.02] ${
+              <Card className={`backdrop-blur-glass bg-card/80 border-border overflow-hidden shadow-glass hover:shadow-glow-primary transition-all duration-300 h-full group-hover:-translate-y-2 ${
                 project.featured ? 'ring-2 ring-primary' : ''
               }`}>
-                <CardHeader className="pb-4">
+                {(project.image || `/projects/project-${(index % 3) + 1}.png`) && (
+                  <div className="w-full h-48 overflow-hidden relative">
+                    <img 
+                      src={project.image || `/projects/project-${(index % 3) + 1}.png`} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent"></div>
+                  </div>
+                )}
+                <CardHeader className={`${(project.image || true) ? 'pt-2 pb-4' : 'pb-4'}`}>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">

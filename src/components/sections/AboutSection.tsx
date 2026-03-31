@@ -93,7 +93,8 @@ export function AboutSection() {
             className="space-y-4"
           >
             <h3 className="text-2xl font-semibold mb-6 text-foreground">Personal Information</h3>
-            {personalInfo.map((info, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              {personalInfo.map((info, index) => (
               <motion.div
                 key={info.label}
                 initial={{ opacity: 0, y: 20 }}
@@ -116,6 +117,7 @@ export function AboutSection() {
                 </Card>
               </motion.div>
             ))}
+            </div>
           </motion.div>
         </div>
       </div>

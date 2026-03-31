@@ -40,6 +40,19 @@ export function EducationSection() {
 
   const education = data?.education || staticEducation;
 
+  const sortedEducation = [...education].sort((a, b) => {
+    if (a.current && !b.current) return -1;
+    if (!a.current && b.current) return 1;
+    
+    const yearA = a.date ? (a.date.match(/\d{4}/g) ? Math.max(...a.date.match(/\d{4}/g)!.map(Number)) : 0) : 0;
+    const yearB = b.date ? (b.date.match(/\d{4}/g) ? Math.max(...b.date.match(/\d{4}/g)!.map(Number)) : 0) : 0;
+    
+    if (yearA !== yearB) return yearB - yearA;
+
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return dateB - dateA;
+  });
 
   return (
     <section className="py-20 relative">
@@ -58,7 +71,7 @@ export function EducationSection() {
         </motion.div>
 
         <div className="max-w-4xl mx-auto space-y-8">
-          {education.map((edu, index) => (
+          {sortedEducation.map((edu, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}

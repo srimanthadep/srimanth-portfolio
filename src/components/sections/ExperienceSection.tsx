@@ -107,37 +107,41 @@ export function ExperienceSection() {
               <Card className={`backdrop-blur-glass bg-card/80 border-border shadow-glass hover:shadow-glow-primary transition-all duration-300 group ${exp.current ? 'ring-2 ring-primary' : ''
                 }`} style={{ overflow: 'hidden', borderRadius: '1rem' }}>
                 <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div className="flex items-start space-x-4">
                       {exp.logo ? (
                         <div className="w-14 h-14 shrink-0 flex items-center justify-center self-start -mt-1">
                           <img src={exp.logo} alt={`${exp.company} logo`} className="w-full h-full object-contain drop-shadow-sm" />
                         </div>
                       ) : (
-                        <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300">
+                        <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors duration-300 flex-shrink-0">
                           <Briefcase className="w-6 h-6 text-primary" />
                         </div>
                       )}
-                      <div className="flex-1">
-                        <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300">{exp.company}</CardTitle>
-                        <p className="text-lg text-muted-foreground mt-1">{exp.position}</p>
-                        <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">
-                          <div className="flex items-center space-x-1">
-                            <Calendar className="w-4 h-4" />
-                            <span>{exp.date}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{exp.location}</span>
-                          </div>
-                        </div>
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300 leading-tight">
+                          {exp.company}
+                        </CardTitle>
+                        <p className="text-lg text-muted-foreground mt-2">{exp.position}</p>
                       </div>
                     </div>
-                    {exp.current && (
-                      <Badge variant="default" className="bg-primary text-primary-foreground">
-                        Current
-                      </Badge>
-                    )}
+                    <div className="flex flex-col items-start sm:items-end space-y-2 flex-shrink-0">
+                      <div className="flex flex-col space-y-2 items-start sm:items-end">
+                        <Badge variant={exp.current ? "default" : "secondary"} className="flex items-center space-x-1 text-xs">
+                          <Calendar className="w-3 h-3" />
+                          <span>{exp.date}</span>
+                        </Badge>
+                        <div className="flex items-center space-x-1 text-sm text-muted-foreground px-1">
+                          <MapPin className="w-3 h-3" />
+                          <span>{exp.location}</span>
+                        </div>
+                      </div>
+                      {exp.current && (
+                        <Badge variant="outline" className="text-primary border-primary bg-primary/10">
+                          Current
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent style={{ overflow: 'hidden', borderRadius: '1rem' }}>
